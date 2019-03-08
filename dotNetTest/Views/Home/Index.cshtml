@@ -1,0 +1,189 @@
+﻿@using System.Collections.Specialized
+@using System.Data.SqlClient;
+@using System.Text;
+@using dotNetTest.Models
+
+@{
+
+
+    var users = ViewBag.Users;
+    var questions = ViewBag.Questions;
+    var answers = ViewBag.Answers;
+    var nouns = ViewBag.Nouns;
+    var verbs = ViewBag.Verbs;
+
+
+
+
+
+    var answer = "";
+    var question = "";
+
+    if (IsPost)
+    {
+        answer = Request.Form["answer"];
+        question = Request.Form["question"];
+
+        Answer answerInsert = new Answer();
+        Question questionInsert = new Question();
+        answerInsert.Insert(answer, "answer", "answer");
+        questionInsert.Insert(question, "question", "question");
+
+        Response.Redirect("~/Home/Index");
+
+    }
+
+}
+
+
+
+<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+<div class="row">
+
+
+
+    <div class="form-group col-md-4">
+        <label for="exampleFormControlSelect2">Keywords</label>
+        <select multiple class="form-control" id="exampleFormControlSelect2">
+            <option selecte d>none</option>
+            @foreach (var user in users)
+            {
+                <option>@user</option>
+            }
+
+
+
+
+
+        </select>
+    </div>
+
+    <div class="form-group col-md-4">
+        <label for="exampleFormControlSelect2">Keywords</label>
+        <select multiple class="form-control" id="exampleFormControlSelect2">
+            <option selected>none</option>
+            @foreach (var user in verbs)
+            {
+                <option>@user</option>
+            }
+
+
+
+
+
+        </select>
+    </div>
+
+
+
+
+    <form method="post">
+        <fieldset>
+            <legend>New Q&A</legend>
+
+            <p>
+                <label for="genre">Question</label>
+                <input type="text" name="answer" value="@Request.Form["answer"]" />
+            </p>
+
+            <p>
+                <label for="year">Answer</label>
+                <input type="text" name="question" value="@Request.Form["question"]" />
+            </p>
+
+            <p><input type="submit" name="buttonSubmit" value="Add Movie" /></p>
+        </fieldset>
+    </form>
+
+
+
+
+
+    <div class="form-group col-md-4">
+        <label for="exampleFormControlSelect2">Keywords</label>
+        <select multiple class="form-control" id="exampleFormControlSelect2">
+            <option selected>none</option>
+            @foreach (var user in nouns)
+            {
+                <option>@user</option>
+            }
+
+
+
+
+
+        </select>
+    </div>
+
+</div>
+<div class="row">
+    <div class="form-group col-md-4">
+        <label for="exampleFormControlSelect2">Vraag</label>
+        <select multiple class="form-control" id="target">
+            <option selected>none</option>
+            @foreach (var user in questions)
+            {
+                <option>@user</option>
+            }
+
+
+
+
+
+        </select>
+    </div>
+
+
+    <div class="form-group col-md-4">
+        <label for="exampleFormControlSelect2">Antwoord</label>
+        <select multiple class="form-control">
+            <option selected>none</option>
+            @foreach (var user in answers)
+            {
+                <option id="insert">@user</option>
+            }
+
+
+        </select>
+    </div>
+
+</div>
+
+
+
+
+
+<h4></h4>
+
+<a href="ChartArrayBasic">
+    <img src="ChartArrayBasic" />
+</a>
+
+
+
+
+
+
+
+<script src="~/Scripts/jquery-3.3.1.js">
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#target").change(function () {
+            var str = "";
+            $("select option:selected").each(function () {
+                str = $(this).text();
+            });
+            $("$insert").text = str;
+        });
+
+        $('.selectpicker').selectpicker();
+
+    });
+</script>
