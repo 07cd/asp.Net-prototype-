@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Clippy": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "I:\C#\asp.net\dotNetTest\Adriaan-18cad82b0123.json"
+      }
+    }
+  }
+}

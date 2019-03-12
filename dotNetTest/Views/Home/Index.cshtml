@@ -26,14 +26,15 @@
 
         Answer answerInsert = new Answer();
         Question questionInsert = new Question();
+        questionInsert.InsertQuestion(question, "question", "question");
         answerInsert.Insert(answer, "answer", "answer");
-        questionInsert.Insert(question, "question", "question");
+
 
         Response.Redirect("~/Home/Index");
 
     }
-
 }
+    
 
 
 
@@ -88,15 +89,15 @@
 
             <p>
                 <label for="genre">Question</label>
-                <input type="text" name="answer" value="@Request.Form["answer"]" />
+                <input type="text" name="answer" value="@Request.Form["question"]" />
             </p>
 
             <p>
                 <label for="year">Answer</label>
-                <input type="text" name="question" value="@Request.Form["question"]" />
+                <input type="text" name="question" value="@Request.Form["answer"]" />
             </p>
 
-            <p><input type="submit" name="buttonSubmit" value="Add Movie" /></p>
+            <p><input type="submit" name="buttonSubmit" value="Add new question and answer" /></p>
         </fieldset>
     </form>
 
@@ -113,22 +114,19 @@
                 <option>@user</option>
             }
 
-
-
-
-
         </select>
     </div>
 
 </div>
 <div class="row">
+    <form method="post" class="remove">
     <div class="form-group col-md-4">
         <label for="exampleFormControlSelect2">Vraag</label>
         <select multiple class="form-control" id="target">
-            <option selected>none</option>
+            <option value="@Request.Form["remove"]"  selected>none</option>
             @foreach (var user in questions)
             {
-                <option>@user</option>
+                <option value="@user">@user</option>
             }
 
 
@@ -137,7 +135,8 @@
 
         </select>
     </div>
-
+        <button class="btn btn-default" type="submit">Remove</button>
+        </form>
 
     <div class="form-group col-md-4">
         <label for="exampleFormControlSelect2">Antwoord</label>
@@ -161,7 +160,7 @@
 <h4></h4>
 
 <a href="ChartArrayBasic">
-    <img src="ChartArrayBasic" />
+    <img src="~/Home/ChartArrayBasic" />
 </a>
 
 
