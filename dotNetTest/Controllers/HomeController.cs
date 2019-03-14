@@ -26,7 +26,7 @@ namespace dotNetTest.Controllers
             ViewData["Users"] = users.Get("SELECT * FROM [user]", 1);
             ViewData["Nouns"] = nouns.Get("SELECT * FROM [noun]", 1);
             ViewData["Verbs"] = verbs.Get("SELECT * FROM [verb]", 1);
-            ViewData["Questions"] = questions.Get("SELECT * FROM [question]", 2);
+            ViewData["Questions"] = questions.Get("SELECT * FROM [question]", 1);
             ViewData["Answers"] = answers.Get("SELECT * FROM [answer]", 1);
             return View();
         }
@@ -50,6 +50,11 @@ namespace dotNetTest.Controllers
 
             return View();
         }
-        
+        public ActionResult UserStats()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
     }
 }

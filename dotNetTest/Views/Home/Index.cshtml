@@ -9,8 +9,8 @@
     var users = ViewBag.Users;
     var questions = ViewBag.Questions;
     var answers = ViewBag.Answers;
-    var nouns = ViewBag.Nouns;
-    var verbs = ViewBag.Verbs;
+    List<string> nouns = ViewBag.Nouns;
+    List<string> verbs = ViewBag.Verbs;
 
 
 
@@ -21,20 +21,21 @@
 
     if (IsPost)
     {
+        //if(Request == )
         answer = Request.Form["answer"];
         question = Request.Form["question"];
 
         Answer answerInsert = new Answer();
         Question questionInsert = new Question();
-        questionInsert.InsertQuestion(question, "question", "question");
-        answerInsert.Insert(answer, "answer", "answer");
-
+        answerInsert.Insert(answers, answer, "answer", "answer");
+        questionInsert.InsertQuestion(nouns, verbs, question, "question", "question");
 
         Response.Redirect("~/Home/Index");
 
     }
 }
-    
+
+
 
 
 
@@ -43,6 +44,21 @@
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
+
+<div class="row">
+    <div class="form-group col-md-6">
+        <form>
+            <div class="col-md-4">
+                <label>Ask a question</label>
+            </div>
+            <div class="col-md-8">
+                <input class="col-md-12" type="text" name="answer" value="@Request.Form["getAnswer"]" />
+            </div>
+            <button class="btn" type="submit">submit</button>
+        </form>
+    </div>
+</div>
+
 
 <div class="row">
 
@@ -120,23 +136,23 @@
 </div>
 <div class="row">
     <form method="post" class="remove">
-    <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">Vraag</label>
-        <select multiple class="form-control" id="target">
-            <option value="@Request.Form["remove"]"  selected>none</option>
-            @foreach (var user in questions)
-            {
-                <option value="@user">@user</option>
-            }
+        <div class="form-group col-md-4">
+            <label for="exampleFormControlSelect2">Vraag</label>
+            <select multiple class="form-control" id="target">
+                <option value="@Request.Form["remove"]" selected>none</option>
+                @foreach (var user in questions)
+                {
+                    <option value="@user">@user</option>
+                }
 
 
 
 
 
-        </select>
-    </div>
+            </select>
+        </div>
         <button class="btn btn-default" type="submit">Remove</button>
-        </form>
+    </form>
 
     <div class="form-group col-md-4">
         <label for="exampleFormControlSelect2">Antwoord</label>
@@ -159,14 +175,15 @@
 
 <h4></h4>
 
-<a href="ChartArrayBasic">
-    <img src="~/Home/ChartArrayBasic" />
-</a>
+<div class="row">
+    <a class="col-md-6" href="~/Home/ChartArrayBasic">
+        <img src="~/Home/ChartArrayBasic" />
+    </a>
 
-
-
-
-
+    <a class="col-md-6" href="~/Home/UserStats">
+        <img src="~/Home/UserStats" />
+    </a>
+</div>
 
 
 <script src="~/Scripts/jquery-3.3.1.js">
