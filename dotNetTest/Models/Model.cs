@@ -22,7 +22,7 @@ namespace dotNetTest.Models
         string lastNoun = "";
         string lastVerb = "";
         string lastKeysentence = "";
-        string lastAnswer = "";
+        public string lastAnswer = "";
         string lastQuestion = "";
 
         string sql = "";
@@ -120,28 +120,32 @@ namespace dotNetTest.Models
         public void Insert(List<string> answer, string variable, string table, string column)
         {
             
+            Debug.WriteLine(variable);
             Connect();
-            if (!answer.Contains(variable))
-            {
+            sql = "IF NOT EXISTS (SELECT *  FROM [" + table + "] WHERE " + column + " = '" + variable + "') BEGIN INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "') END";
+            Execute(sql);
+              if (!answer.Contains(variable))
+              {
+                lastAnswer = variable;
                 sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "')";
-                Execute(sql);
-            }
-            else
-            {
-                sql = "SELECT id FROM " + table + " WHERE  " + column + " = '" + variable + "'";
-                command = new SqlCommand(sql, cnn);
-
-                dataReader = command.ExecuteReader();
-
-                while (dataReader.Read())
-                {
-
-                    lastAnswer = dataReader.GetValue(0).ToString();
-
-                }
-                dataReader.Close();
-            }
-
+                  Execute(sql);
+              }
+              else
+              {
+                  sql = "SELECT id FROM " + table + " WHERE  " + column + " = '" + variable + "'";
+                  command = new SqlCommand(sql, cnn);
+    
+                  dataReader = command.ExecuteReader();
+    
+                  while (dataReader.Read())
+                  {
+    
+                      lastAnswer = dataReader.GetValue(0).ToString();
+                      
+                  }
+                  dataReader.Close();
+              }
+              Debug.WriteLine(lastAnswer);
             DisConnect();
         }
 
@@ -156,7 +160,7 @@ namespace dotNetTest.Models
             allNouns = nouns;
             allVerbs = verbs;
             lastQuestion = variable;
-            string credential_path = @"I:\C#\asp.net\dotNetTest\Adriaan-18cad82b0123.json";
+            string credential_path = @"D:\dotNetTest\dotNetTest\Adriaan-18cad82b0123.json";
             
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
             string sql =
@@ -283,6 +287,7 @@ namespace dotNetTest.Models
             Debug.WriteLine(lastNoun + " " + lastVerb);
             bool numericNoun = int.TryParse(lastNoun, out int lastNounId);
             bool numericVerb = int.TryParse(lastVerb, out int lastVerbId);
+            bool numericAnswer = int.TryParse(lastAnswer, out int lastAnswerId);
             Debug.WriteLine(numericNoun + " " + numericVerb + " " + lastNounId + " " + lastVerbId);
             lastVerbs.ForEach(i => Debug.WriteLine("{0}\t", i));
             lastNouns.ForEach(i => Debug.WriteLine("{0}\t", i));
@@ -300,15 +305,18 @@ namespace dotNetTest.Models
 
                 Execute(sql);
             }
-
-            sql = "INSERT INTO keysentence(answer_id) VALUES((SELECT id FROM question WHERE question = '" + lastQuestion + "'))";
+            Debug.WriteLine(lastAnswerId + " " + lastAnswer);
+            sql = (numericAnswer)? "INSERT INTO keysentence(answer_id) VALUES('"+lastAnswerId+"')" : "INSERT INTO keysentence(answer_id) VALUES((SELECT id FROM answer WHERE answer = '" + lastAnswer + "'))";
             Execute(sql);
 
-            sql =  "UPDATE noun_keysentence SET keysentence_id = (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM question WHERE question = '" + lastQuestion + "')) WHERE keysentence_id = null;";
+            sql = "UPDATE keysentence set question_id = (SELECT id FROM question WHERE question = '" + lastQuestion + "') WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')";
+           Execute(sql);
 
-            Execute(sql);
-            sql = "UPDATE verb_keysentence SET keysentence_id = (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM question WHERE question = 'How to delete a column')) WHERE keysentence_id = null;";
-            Execute(sql);
+            //sql =  "UPDATE noun_keysentence SET keysentence_id = (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')) WHERE keysentence_id = null;";
+
+            //Execute(sql);
+            //sql = "UPDATE verb_keysentence SET keysentence_id = (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')) WHERE keysentence_id = null;";
+            //Execute(sql);
         }
 
         //A function to convert an array to string
