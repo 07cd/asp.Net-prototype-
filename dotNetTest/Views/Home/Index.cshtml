@@ -26,9 +26,9 @@
         question = Request.Form["question"];
 
         Answer answerInsert = new Answer();
-        Question questionInsert = new Question();
         answerInsert.Insert(answers, answer, "answer", "answer");
-        questionInsert.InsertQuestion(nouns, verbs, question, "question", "question");
+        Question questionInsert = new Question();
+        questionInsert.InsertQuestion(nouns, verbs, question, answer, "question", "question");
 
         Response.Redirect("~/Home/Index");
 

@@ -18,11 +18,11 @@ namespace dotNetTest.Models
         List<string> lastVerbs = new List<string>();
         List<string> lastNouns = new List<string>();
 
-
+        string lastAnswer = "";
         string lastNoun = "";
         string lastVerb = "";
         string lastKeysentence = "";
-        public string lastAnswer = "";
+        
         string lastQuestion = "";
 
         string sql = "";
@@ -122,30 +122,15 @@ namespace dotNetTest.Models
             
             Debug.WriteLine(variable);
             Connect();
-            sql = "IF NOT EXISTS (SELECT *  FROM [" + table + "] WHERE " + column + " = '" + variable + "') BEGIN INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "') END";
-            Execute(sql);
+
               if (!answer.Contains(variable))
               {
                 lastAnswer = variable;
                 sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "')";
                   Execute(sql);
               }
-              else
-              {
-                  sql = "SELECT id FROM " + table + " WHERE  " + column + " = '" + variable + "'";
-                  command = new SqlCommand(sql, cnn);
-    
-                  dataReader = command.ExecuteReader();
-    
-                  while (dataReader.Read())
-                  {
-    
-                      lastAnswer = dataReader.GetValue(0).ToString();
-                      
-                  }
-                  dataReader.Close();
-              }
-              Debug.WriteLine(lastAnswer);
+
+              lastAnswer = variable;
             DisConnect();
         }
 
@@ -153,10 +138,10 @@ namespace dotNetTest.Models
 
 
 
-        public void InsertQuestion(List<string> nouns, List<string> verbs, string variable, string table, string column)
+        public void InsertQuestion(List<string> nouns, List<string> verbs, string variable, string answer, string table, string column)
         {
             Connect();
-
+            lastAnswer = answer;
             allNouns = nouns;
             allVerbs = verbs;
             lastQuestion = variable;
@@ -185,8 +170,7 @@ namespace dotNetTest.Models
         {
             Connect();
             string sql =
-                "BEGIN IF NOT EXISTS(SELECT *  FROM [" + table + "] WHERE " + column + " = '" + variable + "') " +
-                "BEGIN INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "') END END";
+                "";
 
             Execute(sql);
             DisConnect();
@@ -278,16 +262,23 @@ namespace dotNetTest.Models
 
 
                 }
-      
-        
-               
 
+
+
+            
+
+            Debug.WriteLine("Inserting " + lastAnswer);
+            sql = "IF NOT EXISTS (SELECT * FROM keysentence WHERE question_id = (SELECT TOP 1 id FROM question WHERE question = '" + lastQuestion + "') AND answer_id = (SELECT TOP 1 id FROM answer WHERE answer = '" + lastAnswer + "')) " +
+                  "BEGIN INSERT INTO keysentence(question_id, answer_id) VALUES((SELECT TOP 1 id FROM question WHERE question = '" + lastQuestion + "'), (SELECT TOP 1 id FROM answer WHERE answer = '" + lastAnswer + "')) END";
+            Execute(sql);
+
+    
 
             // Checks if lastVerb and lastNoun are either id's, which would mean they are not new values, or if they are strings. 
             Debug.WriteLine(lastNoun + " " + lastVerb);
             bool numericNoun = int.TryParse(lastNoun, out int lastNounId);
             bool numericVerb = int.TryParse(lastVerb, out int lastVerbId);
-            bool numericAnswer = int.TryParse(lastAnswer, out int lastAnswerId);
+            
             Debug.WriteLine(numericNoun + " " + numericVerb + " " + lastNounId + " " + lastVerbId);
             lastVerbs.ForEach(i => Debug.WriteLine("{0}\t", i));
             lastNouns.ForEach(i => Debug.WriteLine("{0}\t", i));
@@ -295,28 +286,19 @@ namespace dotNetTest.Models
             // Insert noun_keysentence and verb_keysentence
             foreach (var verbs in lastVerbs)
             {
-                sql = (numericVerb) ? "INSERT INTO verb_keysentence(verb_id) VALUES('" + lastVerbId + "')" : "INSERT INTO verb_keysentence(verb_id) VALUES((SELECT id FROM verb WHERE word = '"+lastVerb+"'))" ;
+                sql = "INSERT INTO verb_keysentence(verb_id, keysentence_id) VALUES( (SELECT TOP 1 id FROM verb WHERE word = '"+verbs+ "'), (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')))";
 
                 Execute(sql);
             }
             foreach (var nouns in lastNouns)
             {
-                sql = (numericNoun) ? "INSERT INTO noun_keysentence(noun_id) VALUES('" + lastNounId + "')" : "INSERT INTO noun_keysentence(noun_id) VALUES((SELECT id FROM noun WHERE word = '" + nouns + "'))";
+                sql = " INSERT INTO noun_keysentence(noun_id, keysentence_id) VALUES( (SELECT TOP 1 id FROM noun WHERE word = '" + nouns + "'), (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')))";
 
                 Execute(sql);
             }
-            Debug.WriteLine(lastAnswerId + " " + lastAnswer);
-            sql = (numericAnswer)? "INSERT INTO keysentence(answer_id) VALUES('"+lastAnswerId+"')" : "INSERT INTO keysentence(answer_id) VALUES((SELECT id FROM answer WHERE answer = '" + lastAnswer + "'))";
-            Execute(sql);
+           
 
-            sql = "UPDATE keysentence set question_id = (SELECT id FROM question WHERE question = '" + lastQuestion + "') WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')";
-           Execute(sql);
-
-            //sql =  "UPDATE noun_keysentence SET keysentence_id = (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')) WHERE keysentence_id = null;";
-
-            //Execute(sql);
-            //sql = "UPDATE verb_keysentence SET keysentence_id = (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')) WHERE keysentence_id = null;";
-            //Execute(sql);
+            
         }
 
         //A function to convert an array to string
