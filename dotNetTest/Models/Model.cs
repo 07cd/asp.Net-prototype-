@@ -7,6 +7,14 @@ using Google.Protobuf.Collections;
 using Google.Cloud.Language.V1;
 using System.Diagnostics;
 
+//Query for resulting answer on question
+//    SELECT n.word, v.word, question, answer FROM keysentence
+//    JOIN question AS q ON q.id = question_id
+//    JOIN answer AS a ON a.id = answer_id
+//    JOIN noun_keysentence AS nk ON nk.id = keysentence.id
+//    JOIN verb_keysentence AS vk ON vk.id = keysentence.id
+//    JOIN noun AS n ON n.id = noun_id
+//    JOIN verb AS v ON v.id = verb_id
 
 namespace dotNetTest.Models
 {
@@ -14,16 +22,16 @@ namespace dotNetTest.Models
     {
         List<string> allNouns;
         List<string> allVerbs;
+        List<string> allAnswers;
+        List<string> allQuestions;
 
         List<string> lastVerbs = new List<string>();
         List<string> lastNouns = new List<string>();
 
-        string lastAnswer = "";
-        string lastNoun = "";
-        string lastVerb = "";
+        public string lastAnswer = "";
+       
         string lastKeysentence = "";
-        
-        string lastQuestion = "";
+        public string lastQuestion = "";
 
         string sql = "";
         private static List<string> sentiments = new List<string>();
@@ -65,16 +73,12 @@ namespace dotNetTest.Models
         // Connect to database
         public void Connect()
         {
-   
             cnn = new SqlConnection(connectionString);
             cnn.Open();
-
-
         }
         // Disconnect to database 
         public void DisConnect()
         {
-         
             command.Dispose();
             cnn.Close();
         }
@@ -115,12 +119,17 @@ namespace dotNetTest.Models
             return Output;
         }
 
-
-
+        /// <summary>
+        /// Method inserts the answer into the database, if it exists get the id.
+        /// LastAnswer is either set to the incoming variable or to the id,
+        /// this will be checked as to insert it directly or search the id where the variable is.
+        /// </summary>
+       
+        //Insert the answer, or if the answer already exists get id
         public void Insert(List<string> answer, string variable, string table, string column)
         {
             
-            Debug.WriteLine(variable);
+            
             Connect();
 
               if (!answer.Contains(variable))
@@ -129,39 +138,51 @@ namespace dotNetTest.Models
                 sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "')";
                   Execute(sql);
               }
+              else
+              {
+                  lastAnswer = Get("SELECT id FROM answer WHERE answer = '" + variable + "' ", 0).ToString();
+              }
 
-              lastAnswer = variable;
+              Debug.WriteLine(lastAnswer);
+
             DisConnect();
         }
 
 
 
 
-
-        public void InsertQuestion(List<string> nouns, List<string> verbs, string variable, string answer, string table, string column)
+        /// <summary>
+        /// Insert 
+        /// </summary>
+      
+        public void InsertQuestion(string Answer, List<string> questions, List<string> nouns, List<string> verbs, string variable, string table, string column)
         {
-            Connect();
-            lastAnswer = answer;
-            allNouns = nouns;
-            allVerbs = verbs;
-            lastQuestion = variable;
-            string credential_path = @"D:\dotNetTest\dotNetTest\Adriaan-18cad82b0123.json";
-            
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
-            string sql =
-              "BEGIN IF NOT EXISTS(SELECT *  FROM [" + table + "] WHERE " + column + " = '" + variable + "') " +
-              "BEGIN INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "') END END";
-
-            Execute(sql);
-            Debug.WriteLine(variable);
-            AnalyzeIncomingData(variable);
-
-          
-
             lastVerbs.Clear();
             lastNouns.Clear();
 
-          
+            Connect();
+            
+            allNouns = nouns;
+            allVerbs = verbs;
+            lastAnswer = Answer;
+
+            string credential_path = @"D:\dotNetTest\dotNetTest\Adriaan-18cad82b0123.json";
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
+            if (!questions.Contains(variable))
+            {
+                lastQuestion = variable;
+                string sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "')";
+                Execute(sql);
+                AnalyzeIncomingData(variable);
+               
+
+            }
+            else
+            {
+                // I'll have to see about setting a new keysentence and verb and noun key
+                lastQuestion = Get("SELECT * FROM[" + table + "] WHERE " + column + " = '" + variable + "'", 0).ToString();
+            }
+
             DisConnect();
         }
 
@@ -169,8 +190,7 @@ namespace dotNetTest.Models
         public void Remove(string variable, string table, string column)
         {
             Connect();
-            string sql =
-                "";
+            string sql = "";
 
             Execute(sql);
             DisConnect();
@@ -212,23 +232,23 @@ namespace dotNetTest.Models
                 if (obj.partOfSpeech.tag == "VERB" || obj.partOfSpeech.tag == "NOUN"){
                         string table = obj.partOfSpeech.tag.ToString().ToLower();
 
-
-                        if (!allNouns.Contains(obj.text.content.ToString()))
+                   
+                        if (!allNouns.Contains(obj.text.content.ToString()) && obj.partOfSpeech.tag == "NOUN")
                         {
                         
                         sql = "INSERT INTO noun(word) VALUES('" + obj.text.content.ToString() + "')";
                             sentiments.Add(obj.text.content.ToString());
-                            lastNoun = obj.text.content.ToString();
+                            
                         
                             lastNouns.Add(obj.text.content.ToString());
                             Execute(sql);
                         }
-                        else if (!allVerbs.Contains(obj.text.content.ToString()))
+                        else if (!allVerbs.Contains(obj.text.content.ToString()) && obj.partOfSpeech.tag == "VERB")
                         {
-                            sql =
-                          "INSERT INTO verb(word) VALUES('" + obj.text.content.ToString() + "')";
-                            sentiments.Add(obj.text.content.ToString());
-                            lastVerb = obj.text.content.ToString();
+                        sql = "INSERT INTO verb(word) VALUES('" + obj.text.content.ToString() + "')";
+
+                        sentiments.Add(obj.text.content.ToString());
+                           
                             lastVerbs.Add(obj.text.content.ToString());
                             Execute(sql);
                         }
@@ -239,60 +259,61 @@ namespace dotNetTest.Models
 
                             dataReader = command.ExecuteReader();
 
+                         
+
+                            
                             while (dataReader.Read())
                             {
-                                
-                          
-                                if (obj.partOfSpeech.tag == "VERB")
-                                {
-                                   lastVerb = dataReader.GetValue(0).ToString();
-                                }
-                                else
-                                {
-                                    lastNoun = dataReader.GetValue(0).ToString();
-                                }
+                                    
+                              
+                                    if (obj.partOfSpeech.tag == "VERB")
+                                    { 
+                                       lastVerbs.Add(dataReader.GetValue(0).ToString());
+                                    }
+                                    else if (obj.partOfSpeech.tag == "NOUN")
+                                    {
+                                        
+                                        lastNouns.Add(dataReader.GetValue(0).ToString());
+                                    }
 
 
                             }
                             dataReader.Close();
                         }
                     }
-                      
-                    
-
-
                 }
 
 
 
             
 
-            Debug.WriteLine("Inserting " + lastAnswer);
-            sql = "IF NOT EXISTS (SELECT * FROM keysentence WHERE question_id = (SELECT TOP 1 id FROM question WHERE question = '" + lastQuestion + "') AND answer_id = (SELECT TOP 1 id FROM answer WHERE answer = '" + lastAnswer + "')) " +
-                  "BEGIN INSERT INTO keysentence(question_id, answer_id) VALUES((SELECT TOP 1 id FROM question WHERE question = '" + lastQuestion + "'), (SELECT TOP 1 id FROM answer WHERE answer = '" + lastAnswer + "')) END";
+            Debug.WriteLine($"Inserting {lastQuestion} {lastAnswer}");
+            bool numericQuestion = int.TryParse(lastQuestion, out int lastQuestionId);
+            bool numericAnswer = int.TryParse(lastAnswer, out int lastAnswerId);
+            string answer = (numericAnswer) ? "'"+lastAnswer+"'" :"(SELECT TOP 1 id FROM answer WHERE answer = '" + lastAnswer + "')";
+            string question = (numericAnswer) ? "'"+lastQuestion+"'" : "(SELECT TOP 1 id FROM question WHERE question = '" + lastQuestion + "')";
+            sql = $"INSERT INTO keysentence(question_id, answer_id) VALUES({question}, {answer})";
             Execute(sql);
 
     
 
-            // Checks if lastVerb and lastNoun are either id's, which would mean they are not new values, or if they are strings. 
-            Debug.WriteLine(lastNoun + " " + lastVerb);
-            bool numericNoun = int.TryParse(lastNoun, out int lastNounId);
-            bool numericVerb = int.TryParse(lastVerb, out int lastVerbId);
-            
-            Debug.WriteLine(numericNoun + " " + numericVerb + " " + lastNounId + " " + lastVerbId);
-            lastVerbs.ForEach(i => Debug.WriteLine("{0}\t", i));
-            lastNouns.ForEach(i => Debug.WriteLine("{0}\t", i));
+           
+          
            
             // Insert noun_keysentence and verb_keysentence
-            foreach (var verbs in lastVerbs)
+            foreach (var verb in lastVerbs)
             {
-                sql = "INSERT INTO verb_keysentence(verb_id, keysentence_id) VALUES( (SELECT TOP 1 id FROM verb WHERE word = '"+verbs+ "'), (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')))";
+                // Check if they are id's or text, if they are id's, insert them directly, else search for the verb where the word = verb
+                bool numericVerb = int.TryParse(verb, out int lastVerbId);
+                sql = (numericVerb)? "INSERT INTO verb_keysentence(verb_id, keysentence_id) VALUES('" + verb + "', (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')))" : "INSERT INTO verb_keysentence(verb_id, keysentence_id) VALUES( (SELECT TOP 1 id FROM verb WHERE word = '" + verb + "'), (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')))";
 
                 Execute(sql);
             }
-            foreach (var nouns in lastNouns)
+            foreach (var noun in lastNouns)
             {
-                sql = " INSERT INTO noun_keysentence(noun_id, keysentence_id) VALUES( (SELECT TOP 1 id FROM noun WHERE word = '" + nouns + "'), (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')))";
+                // Same goes for here, except now for noun
+                bool numericNoun = int.TryParse(noun, out int lastNounId);
+                sql = (numericNoun) ? "INSERT INTO noun_keysentence(noun_id, keysentence_id) VALUES('" + noun + "', (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')))" : "INSERT INTO noun_keysentence(noun_id, keysentence_id) VALUES( (SELECT TOP 1 id FROM noun WHERE word = '" + noun + "'), (SELECT id FROM keysentence WHERE answer_id = (SELECT id FROM answer WHERE answer = '" + lastAnswer + "')))";
 
                 Execute(sql);
             }
@@ -301,17 +322,7 @@ namespace dotNetTest.Models
             
         }
 
-        //A function to convert an array to string
-        private static string ConvertArrayToString(string[] array)
-        {
-            var builder = new StringBuilder();
-            foreach (var value in array)
-            {
-                builder.Append(value);
-                builder.Append('.');
-            }
-            return builder.ToString();
-        }
+      
 
 
 

@@ -1,6 +1,7 @@
 ﻿@using System.Collections.Specialized
 @using System.Data.SqlClient;
 @using System.Text;
+@using System.Web.UI.WebControls
 @using dotNetTest.Models
 
 @{
@@ -11,8 +12,7 @@
     var answers = ViewBag.Answers;
     List<string> nouns = ViewBag.Nouns;
     List<string> verbs = ViewBag.Verbs;
-
-
+ 
 
 
 
@@ -28,11 +28,12 @@
         Answer answerInsert = new Answer();
         answerInsert.Insert(answers, answer, "answer", "answer");
         Question questionInsert = new Question();
-        questionInsert.InsertQuestion(nouns, verbs, question, answer, "question", "question");
+        questionInsert.InsertQuestion(answer, questions, nouns, verbs, question, "question", "question");
 
         Response.Redirect("~/Home/Index");
 
     }
+    //Form check if question or answer is exact duplicate
 }
 
 
@@ -65,7 +66,7 @@
 
 
     <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">Keywords</label>
+        <label for="exampleFormControlSelect2">users</label>
         <select multiple class="form-control" id="exampleFormControlSelect2">
             <option selecte d>none</option>
             @foreach (var user in users)
@@ -81,7 +82,7 @@
     </div>
 
     <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">Keywords</label>
+        <label for="exampleFormControlSelect2">verbs</label>
         <select multiple class="form-control" id="exampleFormControlSelect2">
             <option selected>none</option>
             @foreach (var user in verbs)
@@ -122,7 +123,7 @@
 
 
     <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">Keywords</label>
+        <label for="exampleFormControlSelect2">nouns</label>
         <select multiple class="form-control" id="exampleFormControlSelect2">
             <option selected>none</option>
             @foreach (var user in nouns)
@@ -189,17 +190,17 @@
 <script src="~/Scripts/jquery-3.3.1.js">
 
 </script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#target").change(function () {
-            var str = "";
-            $("select option:selected").each(function () {
-                str = $(this).text();
-            });
-            $("$insert").text = str;
-        });
-
-        $('.selectpicker').selectpicker();
-
-    });
-</script>
+@* <script type="text/javascript"> *@
+@*     $(document).ready(function () { *@
+@*         $("#target").change(function () { *@
+@*             var str = ""; *@
+@*             $("select option:selected").each(function () { *@
+@*                 str = $(this).text(); *@
+@*             }); *@
+@*             $("$insert").text = str; *@
+@*         }); *@
+@* *@
+@*         $('.selectpicker').selectpicker(); *@
+@* *@
+@*     }); *@
+@* </script> *@
