@@ -9,14 +9,6 @@ using Google.Cloud.Language.V1;
 using System.Diagnostics;
 using System.Linq;
 
-//Query for resulting answer on question
-//    SELECT n.word, v.word, question, answer FROM keysentence
-//    JOIN question AS q ON q.id = question_id
-//    JOIN answer AS a ON a.id = answer_id
-//    JOIN noun_keysentence AS nk ON nk.id = keysentence.id
-//    JOIN verb_keysentence AS vk ON vk.id = keysentence.id
-//    JOIN noun AS n ON n.id = noun_id
-//    JOIN verb AS v ON v.id = verb_id
 
 namespace dotNetTest.Models
 {
@@ -213,15 +205,7 @@ namespace dotNetTest.Models
         }
 
 
-        public void Remove(string variable, string table, string column)
-        {
-            Connect();
-            string sql = "";
-
-            Execute(sql);
-            DisConnect();
-        }
-
+      
 
 
 

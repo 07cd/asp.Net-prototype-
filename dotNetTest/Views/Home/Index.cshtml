@@ -12,36 +12,36 @@
     var answers = ViewBag.Answers;
     List<string> nouns = ViewBag.Nouns;
     List<string> verbs = ViewBag.Verbs;
-
+    var output = "";
     var input = "";
-
-    var output = ViewBag.Test;
+    var test = "";
+    
+        if (TempData.Count > 0)
+        {
+            try
+            {
+                output = TempData["answer"].ToString();
+            }
+            catch
+            {
+                output = "Invalid input";
+            }
+        }
+    
+   
     var answer = "";
     var question = "";
 
-   
-        
-  
-    if (IsPost)
-    {
-
-        answer = Request.Form["answer"];
-        question = Request.Form["question"];
-
-        Answer answerInsert = new Answer();
-        answerInsert.Insert(answers, answer, "answer", "answer");
-        Question questionInsert = new Question();
-        questionInsert.InsertQuestion(answer, questions, nouns, verbs, question, "question", "question");
 
 
 
-        Response.Redirect("~/Home/Index");
-        //Todo: multiple forms
-      
-       //Find ss = new Find(Request.Form["answer"], out string Output);   //Find function (working), but i cannot have 2 post request yet (see todo)
-      //output = Output;                                                              //
 
-    }
+
+    
+
+
+
+
     //Todo: Form check if question or answer is exact duplicate
     //Todo: delete functions
 }
@@ -51,14 +51,17 @@
 
 
 <div class="jumbotron">
-    <h4>@output</h4>
+    <h1>@output</h1>
+   
+   
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
 <div class="row">
     <div class="form-group col-md-6">
-        <form method="post">
+    @using (Html.BeginForm("Find", "Home", FormMethod.Post))
+    {
             <div class="col-md-4">
                 <label>Ask a question</label>
             </div>
@@ -66,7 +69,8 @@
                 <input class="col-md-12" type="text" name="answer" value="@Request.Form["answer"]" />
             </div>
             <button class="btn" type="submit">submit</button>
-        </form>
+      
+        }
     </div>
 </div>
 
@@ -110,23 +114,24 @@
 
 
 
-    <form method="post">
-        <fieldset>
-            <legend>New Q&A</legend>
+@using (Html.BeginForm("Insert", "Home", FormMethod.Post))
+{
+    <fieldset>
+        <legend>New Q&A</legend>
 
-            <p>
-                <label for="genre">Question</label>
-                <input type="text" name="question" value="@Request.Form["question"]" />
-            </p>
+        <p>
+            <label for="genre">Question</label>
+            <input type="text" name="question" value="@Request.Form["question"]"/>
+        </p>
 
-            <p>
-                <label for="year">Answer</label>
-                <input type="text" name="answer" value="@Request.Form["answer"]" />
-            </p>
+        <p>
+            <label for="year">Answer</label>
+            <input type="text" name="answer" value="@Request.Form["answer"]"/>
+        </p>
 
-            <p><input type="submit" name="buttonSubmit" value="Add new question and answer" /></p>
-        </fieldset>
-    </form>
+        <p><input type="submit" name="buttonSubmit" value="Add new question and answer"/></p>
+    </fieldset>
+}
 
 
 
@@ -146,24 +151,27 @@
 
 </div>
 <div class="row">
-    <form method="post" class="remove">
-        <div class="form-group col-md-4">
-            <label for="exampleFormControlSelect2">Vraag</label>
-            <select multiple class="form-control" id="target">
-                <option value="@Request.Form["remove"]" selected>none</option>
-                @foreach (var user in questions)
-                {
-                    <option value="@user">@user</option>
-                }
+
+@using (Html.BeginForm("Remove", "Home", FormMethod.Post))
+{
+    <div class="form-group col-md-4">
+        <label for="exampleFormControlSelect2">Vraag</label>
+        <select multiple class="form-control" >
+            
+            <option hidden value="@Request.Form["type"]">RemoveQuestion</option>
+            @foreach (var user in questions)
+            {
+                <option value="@Request.Form["remove"]">@user</option>
+            }
 
 
 
 
 
-            </select>
-        </div>
-        <button class="btn btn-default" type="submit">Remove</button>
-    </form>
+        </select>
+    </div>
+    <button class="btn btn-default" type="submit">Remove</button>
+}
 
     <div class="form-group col-md-4">
         <label for="exampleFormControlSelect2">Antwoord</label>
