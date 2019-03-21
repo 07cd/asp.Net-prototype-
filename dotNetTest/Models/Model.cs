@@ -12,124 +12,25 @@ using System.Linq;
 
 namespace dotNetTest.Models
 {
-    public class Model
+    public class Model : Database
     {
-        List<string> allNouns;
-        List<string> allVerbs;
-        List<string> allAnswers;
-        List<string> allQuestions;
-
-        List<string> lastVerbs = new List<string>();
-        List<string> lastNouns = new List<string>();
-
-        public string lastAnswer = "";
+        
+        static List<string> allNouns;
+        static List<string> allVerbs;
+        static List<string> allAnswers;
+        static List<string> allQuestions;
+      
+        static List<string> lastVerbs = new List<string>();
+        static List<string> lastNouns = new List<string>();
        
+        static public string lastAnswer = "";
        
-        public string lastQuestion = "";
-
-        string sql = "";
-        private static List<string> sentiments = new List<string>();
-
-        SqlConnection cnn;
-        SqlDataAdapter adapter = new SqlDataAdapter();
-    
-        string connectionString = @"Data Source=DESKTOP-9T25K2E\SQLEXPRESS01;Initial Catalog=prototype; Integrated Security=SSPI;";
-        SqlCommand command;
-        SqlDataReader dataReader;
-
-
-
+        static public string lastQuestion = "";
+       
+        static string sql = "";
+        
 
    
-        /// <summary>
-        /// Method for getting the User Statistics data
-        /// </summary>
-        /// <param name="questions"></param>
-        /// <param name="count"></param>
-        public void UserStats(out List<string> questions, out List<string> count)
-        {
-            Connect();
-            sql = "SELECT name, COUNT(question) FROM user_question AS uq JOIN [user] AS u ON (uq.user_id= u.id) JOIN [question] AS q ON (uq.question_id = q.id) GROUP BY name";
-            questions = new List<string>(Get(sql, 0));
-            count = new List<string>(Get(sql, 1));
-           
-            DisConnect();
-        }
-        /// <summary>
-        /// Method for getting the System Statistics data
-        /// </summary>
-        /// <param name="questions"></param>
-        /// <param name="count"></param>
-        public void SystemStats(out List<string> questions, out List<string> count)
-        {
-            Connect();
-            sql = "SELECT question, COUNT(name) FROM user_question AS uq JOIN [user] AS u ON (uq.user_id= u.id) JOIN [question] AS q ON (uq.question_id = q.id) GROUP BY question";
-            questions = new List<string>(Get(sql, 0));
-            count = new List<string>(Get(sql, 1));
-
-            DisConnect();
-        }
-
-
-        /// <summary>
-        /// Connect to the database with the connectionString
-        /// </summary>
-        public void Connect()
-        {
-            
-
-            cnn = new SqlConnection(connectionString);
-            cnn.Open();
-        }
-       
-        /// <summary>
-        /// Execute the query from the string sql
-        /// </summary>
-        /// <param name="sql"></param>
-        public void Execute(string sql)
-        {
-            command = new SqlCommand(sql, cnn);
-            adapter.InsertCommand = command;
-            adapter.InsertCommand.ExecuteNonQuery();
-        }
-
-        /// <summary>
-        /// Get the output of a query in a List, execute the query from the string,
-        /// the column gives which column it takes for the output (zero index), 0 is the first column and so on.
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="column"></param>
-        /// <returns></returns>
-        public List<string> Get(string query, int column)
-        {
-            Connect();
-            List<string> Output = new List<string> { };
-
-            command = new SqlCommand(query, cnn);
-
-            dataReader = command.ExecuteReader();
-
-            while (dataReader.Read())
-            {
-
-                Output.Add(dataReader.GetValue(column).ToString());
-
-            }
-
-            dataReader.Close();
-            DisConnect();
-
-            return Output;
-        }
-
-        /// <summary>
-        /// Disconnect to the database and dispose of the command
-        /// </summary>
-        public void DisConnect()
-        {
-            command.Dispose();
-            cnn.Close();
-        }
 
 
 
@@ -139,7 +40,7 @@ namespace dotNetTest.Models
         /// this will be checked as to insert it directly or search the id where the variable is.
         /// </summary>
         //Insert the answer, or if the answer already exists get id
-        public void Insert(List<string> answer, string variable, string table, string column)
+        public static void Insert(List<string> answer, string variable, string table, string column)
         {
 
             Connect();
@@ -165,7 +66,7 @@ namespace dotNetTest.Models
         /// The variable is analyzed for the verb and noun, the table and column tell where the question needs to be inserted
         /// </summary>
       
-        public void InsertQuestion(string Answer, List<string> questions, List<string> nouns, List<string> verbs, string variable, string table, string column)
+        public static void InsertQuestion(string Answer, List<string> questions, List<string> nouns, List<string> verbs, string variable, string table, string column)
         {
             
             lastVerbs.Clear();
@@ -185,7 +86,7 @@ namespace dotNetTest.Models
                 lastQuestion = variable;
                 string sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "')";
                 Execute(sql);
-                AnalyzeIncomingData(variable);
+                NLP.AnalyzeIncomingData(variable);
             }
             else
             {
@@ -205,92 +106,11 @@ namespace dotNetTest.Models
         }
 
 
-        //Calls the Google NLP Api and throws the response into writeEntitySentiment function
-        protected virtual void AnalyzeIncomingData(string text)
-        {
-            var client = LanguageServiceClient.Create();
-
-            var response = client.AnalyzeSyntax(new Document()
-            {
-                Content = text,
-                Type = Document.Types.Type.PlainText
-
-            });
-
-            this.WriteEntitySentiment(response.Tokens);
-        }
-
-        //Fills the Sentiments array with the entities values
-        protected virtual void WriteEntitySentiment(RepeatedField<Token> tokens)
-        {
-            dynamic jsonObj = JsonConvert.DeserializeObject(tokens.ToString());
-        
-            foreach (var obj in jsonObj)
-            {
-
-         
-                if (obj.partOfSpeech.tag == "VERB" || obj.partOfSpeech.tag == "NOUN"){
-                        string table = obj.partOfSpeech.tag.ToString().ToLower();
-
-                   
-                        if (!allNouns.Contains(obj.text.content.ToString()) && obj.partOfSpeech.tag == "NOUN")
-                        {
-                        
-                        sql = "INSERT INTO noun(word) VALUES('" + obj.text.content.ToString() + "')";
-                            sentiments.Add(obj.text.content.ToString());
-                            
-                        
-                            lastNouns.Add(obj.text.content.ToString());
-                            Execute(sql);
-                        }
-                        else if (!allVerbs.Contains(obj.text.content.ToString()) && obj.partOfSpeech.tag == "VERB")
-                        {
-                        sql = "INSERT INTO verb(word) VALUES('" + obj.text.content.ToString() + "')";
-
-                        sentiments.Add(obj.text.content.ToString());
-                           
-                            lastVerbs.Add(obj.text.content.ToString());
-                            Execute(sql);
-                        }
-                        else
-                        {
-                            sql = "SELECT id FROM " + table + " WHERE word = '" + obj.text.content.ToString() + "'";
-                            command = new SqlCommand(sql, cnn);
-
-                            dataReader = command.ExecuteReader();
-
-                            while (dataReader.Read())
-                            {
-                                    
-                              
-                                    if (obj.partOfSpeech.tag == "VERB")
-                                    { 
-                                       lastVerbs.Add(dataReader.GetValue(0).ToString());
-                                    }
-                                    else if (obj.partOfSpeech.tag == "NOUN")
-                                    {
-                                        
-                                        lastNouns.Add(dataReader.GetValue(0).ToString());
-                                    }
-
-
-                            }
-                            dataReader.Close();
-                        }
-                    }
-                }
-
-
-            insertRelations();
-         
-       
-            
-        }
 
         /// <summary>
         /// Insert the data necessary for all relations to work in the database
         /// </summary>
-        public void insertRelations()
+        public static void insertRelations()
         {
            
             

@@ -17,6 +17,7 @@ namespace dotNetTest.Models
         public string verb;
         public string strOutput;
         public string sql;
+
         public Remove(string variable, string type)
         {
             Connect();

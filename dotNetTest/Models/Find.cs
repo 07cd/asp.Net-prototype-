@@ -28,7 +28,7 @@ namespace dotNetTest.Models
         }
 
       
-        protected override void AnalyzeIncomingData(string text)
+        protected void AnalyzeIncomingData(string text)
         {
             var client = LanguageServiceClient.Create();
             Debug.WriteLine(text);
@@ -42,7 +42,7 @@ namespace dotNetTest.Models
             this.WriteEntitySentiment(response.Tokens);
         }
 
-        protected override void WriteEntitySentiment(RepeatedField<Token> tokens)
+        protected void WriteEntitySentiment(RepeatedField<Token> tokens)
         {
             dynamic jsonObj = JsonConvert.DeserializeObject(tokens.ToString());
 

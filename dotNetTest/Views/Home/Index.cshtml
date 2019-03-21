@@ -1,13 +1,23 @@
 ﻿@using System.Collections.Specialized
 @using System.Data.SqlClient;
+@using System.Diagnostics
 @using System.Text;
 @using System.Web.UI.WebControls
 @using dotNetTest.Models
-
+@using System
 @{
+
+
     var users = ViewBag.Users;
     var questions = ViewBag.Questions;
     var answers = ViewBag.Answers;
+
+   
+    List<string[]> tests = ViewBag.TimeStats;
+  
+  
+  
+
     List<string> nouns = ViewBag.Nouns;
     List<string> verbs = ViewBag.Verbs;
     var output = "";
@@ -347,7 +357,7 @@
         var data = new google.visualization.arrayToDataTable([
             ['Move', 'Percentage'],
             ["Nouns (" + @nouns.Count + ")",  @nouns.Count],
-            ["Verbs (" + @nouns.Count + ")", @verbs.Count],
+            ["Verbs (" + @verbs.Count + ")", @verbs.Count],
         ]);
 
         var options = {
@@ -397,17 +407,23 @@
     }
 
     function drawLineChart() {
-
+       
+       
         var data = google.visualization.arrayToDataTable([
-            ['Speed in time (ms)', 'Question length (mb)'],
-            ['10',  1000],
-            ['100',  1170],
-            ['1000',  660],
-            ['10000',  1030]
+            ['Amount of questions', 'Time'],
+
+            @foreach (var arr in tests)
+            {
+                
+            @:['@(arr[1])', @(arr[0])],
+        }
+
+           
+
         ]);
 
         var options = {
-            title: 'A connection of speed (ms) and question length',
+            title: 'Amount of asked questions over time(days)',
             height: 200,
             curveType: 'function',
             backgroundColor: '#26262b',
@@ -422,17 +438,3 @@
 
 
 </script>
-@* <script type="text/javascript"> *@
-@*     $(document).ready(function () { *@
-@*         $("#target").change(function () { *@
-@*             var str = ""; *@
-@*             $("select option:selected").each(function () { *@
-@*                 str = $(this).text(); *@
-@*             }); *@
-@*             $("$insert").text = str; *@
-@*         }); *@
-@* *@
-@*         $('.selectpicker').selectpicker(); *@
-@* *@
-@*     }); *@
-@* </script> *@

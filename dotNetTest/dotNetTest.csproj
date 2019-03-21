@@ -185,14 +185,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Answer.cs" />
+    <Compile Include="Models\Database.cs" />
     <Compile Include="Models\Find.cs" />
     <Compile Include="Models\Model.cs" />
-    <Compile Include="Models\Noun.cs" />
-    <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\NLP.cs" />
     <Compile Include="Models\Remove.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\Verb.cs" />
+    <Compile Include="Models\Stats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
