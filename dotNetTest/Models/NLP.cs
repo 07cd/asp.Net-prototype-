@@ -32,7 +32,7 @@ namespace dotNetTest.Models
 
 
         //Calls the Google NLP Api and throws the response into writeEntitySentiment function
-        public static void AnalyzeIncomingData(string text)
+        public static void AnalyzeIncomingData(string text, List<string> nouns, List<string> verbs, List<string> questions)
         {
             var client = LanguageServiceClient.Create();
 
@@ -43,6 +43,11 @@ namespace dotNetTest.Models
 
             });
 
+
+            allNouns = nouns;
+            allVerbs = verbs;
+
+
             WriteEntitySentiment(response.Tokens);
         }
 
@@ -51,6 +56,7 @@ namespace dotNetTest.Models
         {
             dynamic jsonObj = JsonConvert.DeserializeObject(tokens.ToString());
 
+          
             foreach (var obj in jsonObj)
             {
 
@@ -59,7 +65,7 @@ namespace dotNetTest.Models
                 {
                     string table = obj.partOfSpeech.tag.ToString().ToLower();
 
-
+                    
                     if (!allNouns.Contains(obj.text.content.ToString()) && obj.partOfSpeech.tag == "NOUN")
                     {
 

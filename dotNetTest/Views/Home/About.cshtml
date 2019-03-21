@@ -5,3 +5,76 @@
 <h3>@ViewBag.Message</h3>
 
 <p>Use this area to provide additional information.</p>
+
+
+@{
+    string output = "";
+    if (TempData.Count > 0)
+    {
+        try
+        {
+            output = TempData["answer"].ToString();
+        }
+        catch
+        {
+            output = "Invalid input";
+        }
+    }
+}
+
+<h1>Output: @output</h1>
+@using (Html.BeginForm("Find", "Home", FormMethod.Post))
+{
+    <div class="col-md-4">
+        <label>Ask a question</label>
+    </div>
+    <div class="col-md-8">
+        <input class="col-md-12" type="text" name="answer" value="@Request.Form["answer"]" />
+    </div>
+    <button class="btn" type="submit">submit</button>
+
+}
+
+
+
+
+@using (Html.BeginForm("Insert", "Home", FormMethod.Post))
+{
+    <fieldset>
+        <legend>New Q&A</legend>
+
+        <p>
+            <label for="genre">Question</label>
+            <input type="text" name="question" value="@Request.Form["question"]" />
+        </p>
+
+        <p>
+            <label for="year">Answer</label>
+            <input type="text" name="answer" value="@Request.Form["answer"]" />
+        </p>
+
+        <p><input type="submit" name="buttonSubmit" value="Add new question and answer" /></p>
+    </fieldset>
+}
+
+
+@* @using (Html.BeginForm("Remove", "Home", FormMethod.Post)) *@
+@* { *@
+@*     <div class="form-group col-md-4"> *@
+@*         <label for="exampleFormControlSelect2">Vraag</label> *@
+@*         <select multiple class="form-control"> *@
+@* *@
+@*             <option hidden value="@Request.Form["type"]">RemoveQuestion</option> *@
+@*             @foreach (var user in questions) *@
+@*             { *@
+@*                 <option value="@Request.Form["remove"]">@user</option> *@
+@*             } *@
+@* *@
+@* *@
+@* *@
+@* *@
+@* *@
+@*         </select> *@
+@*     </div> *@
+@*     <button class="btn btn-default" type="submit">Remove</button> *@
+@* } *@

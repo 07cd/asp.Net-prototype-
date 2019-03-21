@@ -13,13 +13,20 @@ namespace dotNetTest.Models
         /// </summary>
         /// <param name="questions"></param>
         /// <param name="count"></param>
-        public static void UserStats(out List<string> questions, out List<string> count)
+        public static void UserStats(out List<string> questions, out List<string> count, out List<string[]> userStatsList)
         {
             Connect();
             sql = "SELECT name, COUNT(question) FROM user_question AS uq JOIN [user] AS u ON (uq.user_id= u.id) JOIN [question] AS q ON (uq.question_id = q.id) GROUP BY name";
             questions = new List<string>(Get(sql, 0));
             count = new List<string>(Get(sql, 1));
 
+            userStatsList = new List<string[]>();
+            for (int i = 0; i < count.Count; i++)
+            {
+
+                string[] test = new[] { questions[i], count[i] };
+                userStatsList.Add(test);
+            }
             DisConnect();
         }
         /// <summary>
@@ -27,13 +34,19 @@ namespace dotNetTest.Models
         /// </summary>
         /// <param name="questions"></param>
         /// <param name="count"></param>
-        public static void SystemStats(out List<string> questions, out List<string> count)
+        public static void SystemStats(out List<string> questions, out List<string> count, out List<string[]> systemStatList)
         {
             Connect();
             sql = "SELECT question, COUNT(name) FROM user_question AS uq JOIN [user] AS u ON (uq.user_id= u.id) JOIN [question] AS q ON (uq.question_id = q.id) GROUP BY question";
             questions = new List<string>(Get(sql, 0));
             count = new List<string>(Get(sql, 1));
+            systemStatList = new List<string[]>();
+            for (int i = 0; i < count.Count; i++)
+            {
 
+                string[] test = new[] { questions[i], count[i] };
+                systemStatList.Add(test);
+            }
             DisConnect();
         }
 
@@ -54,6 +67,8 @@ namespace dotNetTest.Models
             DisConnect();
 
         }
+
+ 
 
     }
 }

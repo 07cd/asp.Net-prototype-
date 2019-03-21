@@ -30,7 +30,14 @@ namespace dotNetTest.Controllers
             ViewData["DayData"] = dData;
             ViewData["MonthData"] = mData;
             ViewData["YearData"] = yData;
-
+            Stats.UserStats(out List<string> users, out List<string> userCount, out List<string[]> userStatsList);
+            ViewData["UserStat"] = users;
+            ViewData["UserStatCount"] = userCount;
+            ViewData["UserStatList"] = userStatsList;
+            Stats.SystemStats(out List<string> questions, out List<string> questionCount , out List<string[]> systemStatsList);
+            ViewData["SystemStat"] = questions;
+            ViewData["SystemStatCount"] = questionCount;
+            ViewData["SystemStatList"] = systemStatsList;
             return View();
         }
 
@@ -79,7 +86,7 @@ namespace dotNetTest.Controllers
             Model.Insert(allAnswers, answer, "answer", "answer");
             
             Model.InsertQuestion(answer, allQuestions, allNouns, allVerbs, question, "question", "question");
-            return RedirectToAction("Index");
+            return RedirectToAction("About");
         }
 
         [HttpPost]
@@ -89,7 +96,7 @@ namespace dotNetTest.Controllers
             new Find(Request.Form["answer"], out string Output);   
 
             TempData.Add("answer", Output);
-            return (RedirectToAction("Index", new { answer = Output }));
+            return (RedirectToAction("About", new { answer = Output }));
             
         }
         [HttpPost]

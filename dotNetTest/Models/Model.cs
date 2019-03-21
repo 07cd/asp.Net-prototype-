@@ -86,7 +86,7 @@ namespace dotNetTest.Models
                 lastQuestion = variable;
                 string sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "')";
                 Execute(sql);
-                NLP.AnalyzeIncomingData(variable);
+                NLP.AnalyzeIncomingData(variable, allNouns, allVerbs, allQuestions );
             }
             else
             {
