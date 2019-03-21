@@ -3,40 +3,54 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y" crossorigin="anonymous">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css", "~/Content/css/style.css")
+
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+    <div class="container mt-2 mb-2">
+        <div class="jumbotron p-4 pl-0 m-0 mt-2 bg-transparent">
+            <h2 class="p-0 m-0 text-white">Discord bot statics</h2>
+        </div>
+        <div class="d-flex  justify-content-between w-100 text-white align-items mt-2">
+            <div class="navbar m-0">
+                <div class="navbar-collapse collapse pl-0">
+                    <ul class="nav navbar-nav custom-nav">
+                        <li class="active box-shadow-light">@Html.ActionLink("Statics", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Admin", "About", "Home")</li>
+                    </ul>
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-            </div>
+            <div class="ft-17 m-0">@DateTime.Now.Day @DateTime.Now.ToString("MMMM") @DateTime.Now.Year</div>
         </div>
     </div>
-    <div class="container body-content">
+    <!-- Grid system -->
+    <div class="container text-white ">
+       
+        <br/>
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+<!-- 
+<div class="container body-content">
+   
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+    </footer>
+</div>
+-->
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
 </body>
 </html>

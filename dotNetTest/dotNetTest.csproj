@@ -202,6 +202,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\js\con_verbs_nouns.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -321,6 +323,7 @@
     <Content Include="Views\Home\UserStats.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\Charts\conn_verbs_nouns.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

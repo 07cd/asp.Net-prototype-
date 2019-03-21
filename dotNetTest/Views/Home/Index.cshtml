@@ -5,8 +5,6 @@
 @using dotNetTest.Models
 
 @{
-
-
     var users = ViewBag.Users;
     var questions = ViewBag.Questions;
     var answers = ViewBag.Answers;
@@ -15,49 +13,165 @@
     var output = "";
     var input = "";
     var test = "";
-    
-        if (TempData.Count > 0)
+
+    if (TempData.Count > 0)
+    {
+        try
         {
-            try
-            {
-                output = TempData["answer"].ToString();
-            }
-            catch
-            {
-                output = "Invalid input";
-            }
+            output = TempData["answer"].ToString();
         }
-    
-   
+        catch
+        {
+            output = "Invalid input";
+        }
+    }
+
+
     var answer = "";
     var question = "";
-
-
-
-
-
-
-    
-
-
-
 
     //Todo: Form check if question or answer is exact duplicate
     //Todo: delete functions
 }
-
-
-
-
-
-<div class="jumbotron">
-    <h1>@output</h1>
-   
-   
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="d-flex data-grid flex-column box-shadow ">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>verbs and nouns</span>
+            </div>
+            <div class="data-body p-2">
+                <div id="verbs_nouns_chart" class="chart_div"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="d-flex data-grid flex-column box-shadow">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Amount verbs and nouns</span>
+            </div>
+            <div class="data-body p-2">
+                <div id="amount_verbs" class="chart_div"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="d-flex data-grid flex-column box-shadow">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>general statics</span>
+            </div>
+            <div class="data-body p-2">
+                <div id="bar_statics" class="chart_div"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- User and line chart begin -->
+<div class="row mb-4" style="margin-top: 2em;">
+    <div class="col-md-4" style="height: 236.8px">
+        <div class="d-flex data-grid flex-column box-shadow h-100">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Users</span>
+            </div>
+            <div class="data-body p-2 text-light">
+                <div class="d-flex flex-row w-100">
+                    <div class="d-flex justify-content align-items p-3">
+                        <span class="ft-60"><i class="fas fa-user"></i></span>
+                        
+                    </div>
+                    <div class="d-flex flex-column ml-2">
+                        <div class="d-flex align-items border-bottom ">
+                            <span class="ft-40 p-2 pl-0">4</span>
+                            <small class="text-uppercase ft-11">Registered users who joined the chat with the bot</small>
+                        </div>
+                        <div class="d-flex align-items">
+                            <span  class="ft-40 p-2 pl-0">3</span>
+                            <small class="text-uppercase ft-11">Users who at least one time communicate with the bot</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8" >
+        <div class="d-flex data-grid flex-column box-shadow" id="height2">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Bot reaction speed</span>
+            </div>
+            <div class="data-body p-0">
+                <div id="line_statics" class="chart_div"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- User and line chart end -->
+<!-- section all verbs, nouns, question and answer begin -->
+<div class="row mb-4" style="margin-top: 2em;">
+    <div class="col-md-3">
+        <div class="d-flex data-grid flex-column box-shadow ">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Verbs</span>
+            </div>
+            <div class="data-body p-2">
+                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                    @foreach (var v in verbs)
+                    {
+                        <option>@v</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="d-flex data-grid flex-column box-shadow">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Nouns</span>
+            </div>
+            <div class="data-body p-2">
+                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                    @foreach (var n in nouns)
+                    {
+                        <option>@n</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="d-flex data-grid flex-column box-shadow ">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Question</span>
+            </div>
+            <div class="data-body p-2">
+                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                    @foreach (var q in questions)
+                    {
+                        <option>@q</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="d-flex data-grid flex-column box-shadow ">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Answer</span>
+            </div>
+            <div class="data-body p-2">
+                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                    @foreach (var a in answers)
+                    {
+                        <option>@a</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- section all verbs, nouns, question and answer end -->
+<!-- Ask a question form. Condidered to add to Admin page -->
+<!--
 <div class="row">
     <div class="form-group col-md-6">
     @using (Html.BeginForm("Find", "Home", FormMethod.Post))
@@ -69,11 +183,10 @@
                 <input class="col-md-12" type="text" name="answer" value="@Request.Form["answer"]" />
             </div>
             <button class="btn" type="submit">submit</button>
-      
+
         }
     </div>
 </div>
-
 
 <div class="row">
 
@@ -85,7 +198,7 @@
             <option selecte d>none</option>
             @foreach (var user in users)
             {
-                <option>@user</option>
+            <option>@user</option>
             }
 
 
@@ -96,116 +209,217 @@
     </div>
 
     <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">verbs</label>
+        <label for="exampleFormControlSelect2">bs</label>
         <select multiple class="form-control" id="exampleFormControlSelect2">
             <option selected>none</option>
             @foreach (var user in verbs)
             {
-                <option>@user</option>
-            }
+                <option></option>
+                }
 
 
 
 
 
-        </select>
+
+            </select>
+        </div>
+
+
+
+
+        @using (Html.BeginForm("Insert", "Home", FormMethod.Post))
+        {
+            <fieldset>
+                <legend>New Q&A</legend>
+
+                <p>
+                    <label for="genre">Question</label>
+                    <input type="text" name="question" value="@Request.Form["question"]" />
+                </p>
+
+                <p>
+                    <label for="year">Answer</label>
+                    <input type="text" name="answer" value="@Request.Form["answer"]" />
+                </p>
+
+                <p><input type="submit" name="buttonSubmit" value="Add new question and answer" /></p>
+            </fieldset>
+        }
+
+
+
+
+
+        <div class="form-group col-md-4">
+            <label for="exampleFormControlSelect2">nouns</label>
+            <select multiple class="form-control" id="exampleFormControlSelect2">
+                <option selected>none</option>
+                @foreach (var user in nouns)
+                {
+                    <option>@user</option>
+                }
+
+            </select>
+        </div>
+
     </div>
+    <div class="row">
 
+        @using (Html.BeginForm("Remove", "Home", FormMethod.Post))
+        {
+            <div class="form-group col-md-4">
+                <label for="exampleFormControlSelect2">Vraag</label>
+                <select multiple class="form-control">
 
-
-
-@using (Html.BeginForm("Insert", "Home", FormMethod.Post))
-{
-    <fieldset>
-        <legend>New Q&A</legend>
-
-        <p>
-            <label for="genre">Question</label>
-            <input type="text" name="question" value="@Request.Form["question"]"/>
-        </p>
-
-        <p>
-            <label for="year">Answer</label>
-            <input type="text" name="answer" value="@Request.Form["answer"]"/>
-        </p>
-
-        <p><input type="submit" name="buttonSubmit" value="Add new question and answer"/></p>
-    </fieldset>
-}
+                    <option hidden value="@Request.Form["type"]">RemoveQuestion</option>
+                    @foreach (var user in questions)
+                    {
+                        <option value="@Request.Form["remove"]">@user</option>
+                    }
 
 
 
 
 
-    <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">nouns</label>
-        <select multiple class="form-control" id="exampleFormControlSelect2">
-            <option selected>none</option>
-            @foreach (var user in nouns)
-            {
-                <option>@user</option>
-            }
+                </select>
+            </div>
+            <button class="btn btn-default" type="submit">Remove</button>
+        }
 
-        </select>
+        <div class="form-group col-md-4">
+            <label for="exampleFormControlSelect2">Antwoord</label>
+            <select multiple class="form-control">
+                <option selected>none</option>
+                @foreach (var user in answers)
+                {
+                    <option id="insert">@user</option>
+                }
+
+
+            </select>
+        </div>
+
     </div>
+-->
 
-</div>
-<div class="row">
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
 
-@using (Html.BeginForm("Remove", "Home", FormMethod.Post))
-{
-    <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">Vraag</label>
-        <select multiple class="form-control" >
-            
-            <option hidden value="@Request.Form["type"]">RemoveQuestion</option>
-            @foreach (var user in questions)
-            {
-                <option value="@Request.Form["remove"]">@user</option>
-            }
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', { 'packages': ['corechart', 'bar', 'line'] });
 
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
 
+    google.charts.setOnLoadCallback(drawColColors);
+    google.charts.setOnLoadCallback(drawBarColors);
+    google.charts.setOnLoadCallback(drawLineChart);
 
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+    function drawChart() {
 
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+            ['Registered nouns', @nouns.Count],
+            ['Registered verbs', @verbs.Count]
+        ]);
 
-        </select>
-    </div>
-    <button class="btn btn-default" type="submit">Remove</button>
-}
+        // Set chart options
+        var options = {
+            'height': 200,
+            'backgroundColor': '#26262b',
+            'chartArea': { left: 5, top: 30 },
+            colors: ['#e6693e', '#50d4b5']
+        };
 
-    <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">Antwoord</label>
-        <select multiple class="form-control">
-            <option selected>none</option>
-            @foreach (var user in answers)
-            {
-                <option id="insert">@user</option>
-            }
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('verbs_nouns_chart'));
+        chart.draw(data, options);
+    }
 
+    function drawColColors() {
+        var data = new google.visualization.arrayToDataTable([
+            ['Move', 'Percentage'],
+            ["Nouns (" + @nouns.Count + ")",  @nouns.Count],
+            ["Verbs (" + @nouns.Count + ")", @verbs.Count],
+        ]);
 
-        </select>
-    </div>
+        var options = {
+            height: 200,
+            backgroundColor: '#26262b',
+            legend: { position: 'none' },
+            axes: {
+                x: {
+                    0: { side: 'top', label: 'amount of both' } // Top x-axis.
+                }
+            },
+            bar: { groupWidth: "90%" },
+            colors: ['#50d4b5', '#e6693e']
+        };
 
-</div>
+        var chart = new google.charts.Bar(document.getElementById('amount_verbs'));
+        // Convert the Classic options to Material options.
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
 
+    function drawBarColors() {
+        var data = new google.visualization.arrayToDataTable([
+            ['', 'Percentage'],
+            ["Questions (@questions.Count)", @questions.Count],
+            ["Answers (@answers.Count)", @answers.Count],
+            ["Verbs (@verbs.Count)", @verbs.Count],
+            ["Nouns (@nouns.Count)", @nouns.Count],
+        ]);
 
+        var options = {
+            height: 200,
+            legend: { position: 'none' },
+            backgroundColor: '#26262b',
+            bars: 'horizontal', // Required for Material Bar Charts.
+            axes: {
+                x: {
+                    0: { side: 'top'} // Top x-axis.
+                }
+            },
+            bar: { groupWidth: "90%" },
+            //#b8bfda
+            colors: ["#8e9fdc"]
+        };
 
+        var chart = new google.charts.Bar(document.getElementById('bar_statics'));
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
 
+    function drawLineChart() {
 
-<h4></h4>
+        var data = google.visualization.arrayToDataTable([
+            ['Speed in time (ms)', 'Question length (mb)'],
+            ['10',  1000],
+            ['100',  1170],
+            ['1000',  660],
+            ['10000',  1030]
+        ]);
 
-<div class="row">
-    <a class="col-md-6" href="~/Home/ChartArrayBasic">
-        <img src="~/Home/ChartArrayBasic" />
-    </a>
+        var options = {
+            title: 'A connection of speed (ms) and question length',
+            height: 200,
+            curveType: 'function',
+            backgroundColor: '#26262b',
+            colors: ['#50d4b5'],
+            legend: { position: 'bottom' }
+        };
 
-    <a class="col-md-6" href="~/Home/UserStats">
-        <img src="~/Home/UserStats" />
-    </a>
-</div>
+        var chart = new google.visualization.LineChart(document.getElementById('line_statics'));
 
+        chart.draw(data, options);
+    }
 
-<script src="~/Scripts/jquery-3.3.1.js">
 
 </script>
 @* <script type="text/javascript"> *@

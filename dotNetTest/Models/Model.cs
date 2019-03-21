@@ -33,7 +33,7 @@ namespace dotNetTest.Models
         SqlConnection cnn;
         SqlDataAdapter adapter = new SqlDataAdapter();
     
-        string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=prototype; Integrated Security=SSPI;";
+        string connectionString = @"Data Source=DESKTOP-9T25K2E\SQLEXPRESS01;Initial Catalog=prototype; Integrated Security=SSPI;";
         SqlCommand command;
         SqlDataReader dataReader;
 
@@ -203,16 +203,6 @@ namespace dotNetTest.Models
 
             DisConnect();
         }
-
-
-      
-
-
-
-
-
-
-
 
 
         //Calls the Google NLP Api and throws the response into writeEntitySentiment function
