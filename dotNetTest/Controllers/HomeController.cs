@@ -21,9 +21,15 @@ namespace dotNetTest.Controllers
             ViewData["Verbs"] = Database.Get("SELECT * FROM [verb]", 1);
             ViewData["Questions"] = Database.Get("SELECT * FROM [question]", 1);
             ViewData["Answers"] = Database.Get("SELECT * FROM [answer]", 1);
-            Stats.TimeStats(out List<string[]> count);
-            ViewData["TimeStats"] = count;
-            //Response.Write(test.Get("SELECT * FROM [user]", 1));
+            //Year
+            Stats.TimeStats(out List<string[]> yData, "SELECT count(*), DATEPART(year, [date]) FROM user_question GROUP BY DATEPART(year, [date])");
+            //Month
+            Stats.TimeStats(out List<string[]> mData, "SELECT count(*), FORMAT([date], 'Y') FROM user_question GROUP BY  FORMAT([date], 'Y')"); 
+            //Day
+            Stats.TimeStats(out List<string[]> dData, "SELECT count(*), [date] FROM user_question GROUP BY[date]");
+            ViewData["DayData"] = dData;
+            ViewData["MonthData"] = mData;
+            ViewData["YearData"] = yData;
 
             return View();
         }
@@ -94,6 +100,7 @@ namespace dotNetTest.Controllers
             return RedirectToAction("Index");
         }
 
+       
 
     }
 }

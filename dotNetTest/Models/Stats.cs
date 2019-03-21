@@ -37,11 +37,11 @@ namespace dotNetTest.Models
             DisConnect();
         }
 
-        public static void TimeStats(out List<string[]> timeStats)
+        public static void TimeStats(out List<string[]> timeStats, string query)
         {
             Connect();
-
-            sql = "SELECT count(*), [date] FROM user_question GROUP BY [date]";
+            sql = query;
+           
             List<string> count = new List<string>(Get(sql, 0));
             List<string> time = new List<string>(Get(sql, 1));
             timeStats = new List<string[]>();

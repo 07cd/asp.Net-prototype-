@@ -12,17 +12,27 @@
     var questions = ViewBag.Questions;
     var answers = ViewBag.Answers;
 
-   
-    List<string[]> tests = ViewBag.TimeStats;
-  
-  
-  
+    List <string[]> day = ViewBag.DayData;
+    List<string[]> month = ViewBag.MonthData;
+    List<string[]> year = ViewBag.YearData;
+
+
+    foreach (var arr in day)
+    {
+        
+       Debug.Write(arr[1]);
+        Debug.Write(arr[0]);
+    }
+
+
 
     List<string> nouns = ViewBag.Nouns;
     List<string> verbs = ViewBag.Verbs;
     var output = "";
     var input = "";
     var test = "";
+
+
 
     if (TempData.Count > 0)
     {
@@ -41,281 +51,292 @@
     var question = "";
 
     //Todo: Form check if question or answer is exact duplicate
+
     //Todo: delete functions
 }
-<div class="row mb-4">
-    <div class="col-md-4">
-        <div class="d-flex data-grid flex-column box-shadow ">
-            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                <span>verbs and nouns</span>
-            </div>
-            <div class="data-body p-2">
-                <div id="verbs_nouns_chart" class="chart_div"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="d-flex data-grid flex-column box-shadow">
-            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                <span>Amount verbs and nouns</span>
-            </div>
-            <div class="data-body p-2">
-                <div id="amount_verbs" class="chart_div"></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="d-flex data-grid flex-column box-shadow">
-            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                <span>general statics</span>
-            </div>
-            <div class="data-body p-2">
-                <div id="bar_statics" class="chart_div"></div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- User and line chart begin -->
-<div class="row mb-4" style="margin-top: 2em;">
-    <div class="col-md-4" style="height: 236.8px">
-        <div class="d-flex data-grid flex-column box-shadow h-100">
-            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                <span>Users</span>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="d-flex data-grid flex-column box-shadow ">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>verbs and nouns</span>
+                </div>
+                <div class="data-body p-2">
+                    <div id="verbs_nouns_chart" class="chart_div"></div>
+                </div>
             </div>
-            <div class="data-body p-2 text-light">
-                <div class="d-flex flex-row w-100">
-                    <div class="d-flex justify-content align-items p-3">
-                        <span class="ft-60"><i class="fas fa-user"></i></span>
-                        
-                    </div>
-                    <div class="d-flex flex-column ml-2">
-                        <div class="d-flex align-items border-bottom ">
-                            <span class="ft-40 p-2 pl-0">4</span>
-                            <small class="text-uppercase ft-11">Registered users who joined the chat with the bot</small>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex data-grid flex-column box-shadow">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>Amount verbs and nouns</span>
+                </div>
+                <div class="data-body p-2">
+                    <div id="amount_verbs" class="chart_div"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex data-grid flex-column box-shadow">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>general statics</span>
+                </div>
+                <div class="data-body p-2">
+                    <div id="bar_statics" class="chart_div"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User and line chart begin -->
+    <div class="row mb-4" style="margin-top: 2em;">
+        <div class="col-md-4" style="height: 236.8px">
+            <div class="d-flex data-grid flex-column box-shadow h-100">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>Users</span>
+                </div>
+                <div class="data-body p-2 text-light">
+                    <div class="d-flex flex-row w-100">
+                        <div class="d-flex justify-content align-items p-3">
+                            <span class="ft-60"><i class="fas fa-user"></i></span>
+
                         </div>
-                        <div class="d-flex align-items">
-                            <span  class="ft-40 p-2 pl-0">3</span>
-                            <small class="text-uppercase ft-11">Users who at least one time communicate with the bot</small>
+                        <div class="d-flex flex-column ml-2">
+                            <div class="d-flex align-items border-bottom ">
+                                <span class="ft-40 p-2 pl-0">4</span>
+                                <small class="text-uppercase ft-11">Registered users who joined the chat with the bot</small>
+                            </div>
+                            <div class="d-flex align-items">
+                                <span class="ft-40 p-2 pl-0">3</span>
+                                <small class="text-uppercase ft-11">Users who at least one time communicate with the bot</small>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-8" >
-        <div class="d-flex data-grid flex-column box-shadow" id="height2">
-            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                <span>Bot reaction speed</span>
-            </div>
-            <div class="data-body p-0">
-                <div id="line_statics" class="chart_div"></div>
+        <div class="col-md-8">
+            <div class="d-flex data-grid flex-column box-shadow" id="height2">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>QUESTIONS OVER TIME</span>
+                    <select id="timeSelect" class="form-control" onchange="drawLineChart()">
+                       
+                        <option value="year">Year</option>
+                        <option value="month">Month</option>
+                        <option  value="day" selected>Day</option>
+                    </select>
+
+                </div>
+                <div class="data-body p-0">
+                    <div id="line_statics" class="chart_div"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- User and line chart end -->
-<!-- section all verbs, nouns, question and answer begin -->
-<div class="row mb-4" style="margin-top: 2em;">
-    <div class="col-md-3">
-        <div class="d-flex data-grid flex-column box-shadow ">
-            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                <span>Verbs</span>
+    <!-- User and line chart end -->
+    <!-- section all verbs, nouns, question and answer begin -->
+    <div class="row mb-4" style="margin-top: 2em;">
+        <div class="col-md-3">
+            <div class="d-flex data-grid flex-column box-shadow ">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>Verbs</span>
+                </div>
+                <div class="data-body p-2">
+                    <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                        @foreach (var v in verbs)
+                        {
+                            <option>@v</option>
+                        }
+                    </select>
+                </div>
             </div>
-            <div class="data-body p-2">
-                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
-                    @foreach (var v in verbs)
-                    {
-                        <option>@v</option>
+        </div>
+        <div class="col-md-3">
+            <div class="d-flex data-grid flex-column box-shadow">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>Nouns</span>
+                </div>
+                <div class="data-body p-2">
+                    <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                        @foreach (var n in nouns)
+                        {
+                            <option>@n</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="d-flex data-grid flex-column box-shadow ">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>Question</span>
+                </div>
+                <div class="data-body p-2">
+                    <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                        @foreach (var q in questions)
+                        {
+                            <option>@q</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="d-flex data-grid flex-column box-shadow ">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>Answer</span>
+                </div>
+                <div class="data-body p-2">
+                    <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                        @foreach (var a in answers)
+                        {
+                            <option>@a</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- section all verbs, nouns, question and answer end -->
+    <!-- Ask a question form. Condidered to add to Admin page -->
+    <!--
+    <div class="row">
+        <div class="form-group col-md-6">
+        @using (Html.BeginForm("Find", "Home", FormMethod.Post))
+        {
+                <div class="col-md-4">
+                    <label>Ask a question</label>
+                </div>
+                <div class="col-md-8">
+                    <input class="col-md-12" type="text" name="answer" value="@Request.Form["answer"]" />
+                </div>
+                <button class="btn" type="submit">submit</button>
+
+            }
+        </div>
+    </div>
+
+    <div class="row">
+
+
+
+        <div class="form-group col-md-4">
+            <label for="exampleFormControlSelect2">users</label>
+            <select multiple class="form-control" id="exampleFormControlSelect2">
+                <option selecte d>none</option>
+                @foreach (var user in users)
+                {
+                <option>@user</option>
+                }
+
+
+
+
+
+            </select>
+        </div>
+
+        <div class="form-group col-md-4">
+            <label for="exampleFormControlSelect2">bs</label>
+            <select multiple class="form-control" id="exampleFormControlSelect2">
+                <option selected>none</option>
+                @foreach (var user in verbs)
+                {
+                    <option></option>
                     }
+
+
+
+
+
+
                 </select>
             </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="d-flex data-grid flex-column box-shadow">
-            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                <span>Nouns</span>
-            </div>
-            <div class="data-body p-2">
-                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
-                    @foreach (var n in nouns)
-                    {
-                        <option>@n</option>
-                    }
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="d-flex data-grid flex-column box-shadow ">
-            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                <span>Question</span>
-            </div>
-            <div class="data-body p-2">
-                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
-                    @foreach (var q in questions)
-                    {
-                        <option>@q</option>
-                    }
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="d-flex data-grid flex-column box-shadow ">
-            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                <span>Answer</span>
-            </div>
-            <div class="data-body p-2">
-                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
-                    @foreach (var a in answers)
-                    {
-                        <option>@a</option>
-                    }
-                </select>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- section all verbs, nouns, question and answer end -->
-<!-- Ask a question form. Condidered to add to Admin page -->
-<!--
-<div class="row">
-    <div class="form-group col-md-6">
-    @using (Html.BeginForm("Find", "Home", FormMethod.Post))
-    {
-            <div class="col-md-4">
-                <label>Ask a question</label>
-            </div>
-            <div class="col-md-8">
-                <input class="col-md-12" type="text" name="answer" value="@Request.Form["answer"]" />
-            </div>
-            <button class="btn" type="submit">submit</button>
-
-        }
-    </div>
-</div>
-
-<div class="row">
 
 
 
-    <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">users</label>
-        <select multiple class="form-control" id="exampleFormControlSelect2">
-            <option selecte d>none</option>
-            @foreach (var user in users)
+
+            @using (Html.BeginForm("Insert", "Home", FormMethod.Post))
             {
-            <option>@user</option>
+                <fieldset>
+                    <legend>New Q&A</legend>
+
+                    <p>
+                        <label for="genre">Question</label>
+                        <input type="text" name="question" value="@Request.Form["question"]" />
+                    </p>
+
+                    <p>
+                        <label for="year">Answer</label>
+                        <input type="text" name="answer" value="@Request.Form["answer"]" />
+                    </p>
+
+                    <p><input type="submit" name="buttonSubmit" value="Add new question and answer" /></p>
+                </fieldset>
             }
 
 
 
 
 
-        </select>
-    </div>
-
-    <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">bs</label>
-        <select multiple class="form-control" id="exampleFormControlSelect2">
-            <option selected>none</option>
-            @foreach (var user in verbs)
-            {
-                <option></option>
-                }
-
-
-
-
-
-
-            </select>
-        </div>
-
-
-
-
-        @using (Html.BeginForm("Insert", "Home", FormMethod.Post))
-        {
-            <fieldset>
-                <legend>New Q&A</legend>
-
-                <p>
-                    <label for="genre">Question</label>
-                    <input type="text" name="question" value="@Request.Form["question"]" />
-                </p>
-
-                <p>
-                    <label for="year">Answer</label>
-                    <input type="text" name="answer" value="@Request.Form["answer"]" />
-                </p>
-
-                <p><input type="submit" name="buttonSubmit" value="Add new question and answer" /></p>
-            </fieldset>
-        }
-
-
-
-
-
-        <div class="form-group col-md-4">
-            <label for="exampleFormControlSelect2">nouns</label>
-            <select multiple class="form-control" id="exampleFormControlSelect2">
-                <option selected>none</option>
-                @foreach (var user in nouns)
-                {
-                    <option>@user</option>
-                }
-
-            </select>
-        </div>
-
-    </div>
-    <div class="row">
-
-        @using (Html.BeginForm("Remove", "Home", FormMethod.Post))
-        {
             <div class="form-group col-md-4">
-                <label for="exampleFormControlSelect2">Vraag</label>
-                <select multiple class="form-control">
-
-                    <option hidden value="@Request.Form["type"]">RemoveQuestion</option>
-                    @foreach (var user in questions)
+                <label for="exampleFormControlSelect2">nouns</label>
+                <select multiple class="form-control" id="exampleFormControlSelect2">
+                    <option selected>none</option>
+                    @foreach (var user in nouns)
                     {
-                        <option value="@Request.Form["remove"]">@user</option>
+                        <option>@user</option>
                     }
 
+                </select>
+            </div>
+
+        </div>
+        <div class="row">
+
+            @using (Html.BeginForm("Remove", "Home", FormMethod.Post))
+            {
+                <div class="form-group col-md-4">
+                    <label for="exampleFormControlSelect2">Vraag</label>
+                    <select multiple class="form-control">
+
+                        <option hidden value="@Request.Form["type"]">RemoveQuestion</option>
+                        @foreach (var user in questions)
+                        {
+                            <option value="@Request.Form["remove"]">@user</option>
+                        }
 
 
+
+
+
+                    </select>
+                </div>
+                <button class="btn btn-default" type="submit">Remove</button>
+            }
+
+            <div class="form-group col-md-4">
+                <label for="exampleFormControlSelect2">Antwoord</label>
+                <select multiple class="form-control">
+                    <option selected>none</option>
+                    @foreach (var user in answers)
+                    {
+                        <option id="insert">@user</option>
+                    }
 
 
                 </select>
             </div>
-            <button class="btn btn-default" type="submit">Remove</button>
-        }
 
-        <div class="form-group col-md-4">
-            <label for="exampleFormControlSelect2">Antwoord</label>
-            <select multiple class="form-control">
-                <option selected>none</option>
-                @foreach (var user in answers)
-                {
-                    <option id="insert">@user</option>
-                }
-
-
-            </select>
         </div>
-
-    </div>
--->
+    -->
 
 <script src="~/Scripts/jquery-3.3.1.js"></script>
 <script type="text/javascript">
-
+  
+  
     // Load the Visualization API and the corechart package.
     google.charts.load('current', { 'packages': ['corechart', 'bar', 'line'] });
 
@@ -405,25 +426,57 @@
         var chart = new google.charts.Bar(document.getElementById('bar_statics'));
         chart.draw(data, google.charts.Bar.convertOptions(options));
     }
-
+     
+  
     function drawLineChart() {
+     
+        var selection = document.getElementById("timeSelect").value;
+   
        
        
-        var data = google.visualization.arrayToDataTable([
-            ['Amount of questions', 'Time'],
+        if (selection == 'year') {
+            var data = google.visualization.arrayToDataTable([
+                ['Amount of questions', 'Time(year)'],
 
-            @foreach (var arr in tests)
+          
+
+                @foreach (var arr in year)
             {
-                
-            @:['@(arr[1])', @(arr[0])],
+
+                @:['@(arr[1])', @(arr[0])],
+            }
+            ]);
         }
+        else if (selection == 'month') {
+            var data = google.visualization.arrayToDataTable([
+                ['Amount of questions', 'Time(month)'],
 
-           
+          
 
-        ]);
+                @foreach (var arr in month)
+            {
+
+                @:['@(arr[1])', @(arr[0])],
+            }
+            ]);
+        }
+        else{
+            var data = google.visualization.arrayToDataTable([
+                ['Amount of questions', 'Time(days)'],
+
+          
+
+                @foreach (var arr in day)
+            {
+
+                @:['@(arr[1])', @(arr[0])],
+            }
+            ]);
+        }
+     
 
         var options = {
-            title: 'Amount of asked questions over time(days)',
+            title: 'Amount of asked questions over time',
             height: 200,
             curveType: 'function',
             backgroundColor: '#26262b',
@@ -434,7 +487,33 @@
         var chart = new google.visualization.LineChart(document.getElementById('line_statics'));
 
         chart.draw(data, options);
-    }
-
+ 
+        }
+   
 
 </script>
+
+@* var selection = $('#timeSelect').value(); *@
+@* if (selection == "day") { *@
+@* var data = google.visualization.arrayToDataTable([ *@
+@* ['Amount of questions', 'Time'], *@
+@* @foreach (var arr in day) *@
+@* { *@
+@* *@
+@*     @:['@(arr[1])', '@(arr[0])'], *@
+@* } *@
+@* ]); *@
+@* } *@
+@* if (selection == "month") { *@
+@* var data = google.visualization.arrayToDataTable([ *@
+@* ['Amount of questions', 'Time'], *@
+@* @foreach (var arr in month) *@
+@* { *@
+@* *@
+@*     @:['@(arr[1])', '@(arr[0])'], *@
+@* } *@
+@* ]); *@
+@* } *@
+@* else { *@
+@*            *@
+@* } *@
