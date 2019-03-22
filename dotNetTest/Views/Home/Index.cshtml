@@ -376,6 +376,9 @@
     google.charts.setOnLoadCallback(drawBarColors);
     google.charts.setOnLoadCallback(drawLineChart);
 
+    google.charts.setOnLoadCallback(drawQuestionStats);
+    google.charts.setOnLoadCallback(drawSystemStats);
+
     // Callback that creates and populates a data table,
     // instantiates the pie chart, passes in the data and
     // draws it.
@@ -431,6 +434,7 @@
     function drawBarColors() {
         var data = new google.visualization.arrayToDataTable([
             ['', 'Percentage'],
+            ["Questions (@questions.Count)", @questions.Count],
             ["Questions (@questions.Count)", @questions.Count],
             ["Answers (@answers.Count)", @answers.Count],
             ["Verbs (@verbs.Count)", @verbs.Count],
@@ -521,73 +525,74 @@
 
 
 
-//    function drawColColors() {
-//        var data = new google.visualization.arrayToDataTable([
-//            ['', 'Percentage'],
-//
-//
-//
-//            foreach (var arr in userStatList)
-//            {
-//
-//                :['(arr[1])', (arr[0])],
-//            }
-//
-//
-//        ]);
-//
-//        var options = {
-//            height: 200,
-//            legend: { position: 'none' },
-//            backgroundColor: '#26262b',
-//            bars: 'horizontal', // Required for Material Bar Charts.
-//            axes: {
-//                x: {
-//                    0: { side: 'top'} // Top x-axis.
-//                }
-//            },
-//            bar: { groupWidth: "90%" },
-//            //#b8bfda
-//            colors: ["#8e9fdc"]
-//        };
-//
-//        var chart = new google.charts.Bar(document.getElementById('userStat'));
-//        chart.draw(data, google.charts.Bar.convertOptions(options));
-//    }
+    function drawQuestionStats() {
+        var data = new google.visualization.arrayToDataTable([
+            ['', 'Percentage'],
 
-//    function drawBarColors() {
-//        var data = new google.visualization.arrayToDataTable([
-//            ['', 'Percentage'],
-//
-//
-//
-//            foreach (var arr in systemStatList)
-//            {
-//
-//                :['(arr[1])', (arr[0])],
-//            }
-//
-//
-//        ]);
-//
-//        var options = {
-//            height: 200,
-//            backgroundColor: '#26262b',
-//            legend: { position: 'none' },
-//            axes: {
-//                x: {
-//                    0: { side: 'top', label: 'amount of both' } // Top x-axis.
-//                }
-//            },
-//            bar: { groupWidth: "90%" },
-//            colors: ['#50d4b5', '#e6693e']
-//        };
-//
-//
-//        var chart = new google.charts.Bar(document.getElementById('systemStat'));
-//        chart.draw(data, google.charts.Bar.convertOptions(options));
-//    }
-//
+
+
+
+            @foreach (var arr in userStatList)
+            {
+
+                 @:['@(arr[0])', @(arr[1])],
+            }
+
+
+        ]);
+
+        var options = {
+            height: 200,
+            legend: { position: 'none' },
+            backgroundColor: '#26262b',
+            bars: 'horizontal', // Required for Material Bar Charts.
+            axes: {
+                x: {
+                    0: { side: 'top'} // Top x-axis.
+                }
+            },
+            bar: { groupWidth: "90%" },
+            //#b8bfda
+            colors: ["#8e9fdc"]
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('userStat'));
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+
+    function drawSystemStats() {
+        var data = new google.visualization.arrayToDataTable([
+            ['', 'Percentage'],
+
+
+
+            @foreach (var arr in systemStatList)
+            {
+
+                 @:['@(arr[0])', @(arr[1])],
+            }
+
+
+        ]);
+
+        var options = {
+            height: 200,
+            backgroundColor: '#26262b',
+            legend: { position: 'none' },
+            axes: {
+                x: {
+                    0: { side: 'top', label: 'amount of both' } // Top x-axis.
+                }
+            },
+            bar: { groupWidth: "90%" },
+            colors: ['#50d4b5', '#e6693e']
+        };
+
+
+        var chart = new google.charts.Bar(document.getElementById('systemStat'));
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+
 
 
 
