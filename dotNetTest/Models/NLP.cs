@@ -17,16 +17,12 @@ namespace dotNetTest.Models
         Model dataBase = new Model();
         static List<string> allNouns;
         static List<string> allVerbs;
-        static List<string> allAnswers;
-        static List<string> allQuestions;
       
-        static List<string> lastVerbs = new List<string>();
-        static List<string> lastNouns = new List<string>();
+      
+        public static List<string> lastVerbs = new List<string>();
+        public static List<string> lastNouns = new List<string>();
 
-        static public string lastAnswer = "";
-       
-        static public string lastQuestion = "";
-       
+    
         static string sql = "";
         static private List<string> sentiments = new List<string>();
 

@@ -87,6 +87,11 @@ namespace dotNetTest.Models
                 string sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "')";
                 Execute(sql);
                 NLP.AnalyzeIncomingData(variable, allNouns, allVerbs, allQuestions );
+
+                var verb = NLP.lastVerbs;
+                var test = NLP.lastNouns;
+
+
             }
             else
             {
@@ -121,10 +126,11 @@ namespace dotNetTest.Models
             sql = $"IF NOT EXISTS (SELECT * FROM keysentence WHERE question_id = {question} AND answer_id = {answer}) BEGIN INSERT INTO keysentence(question_id, answer_id) VALUES({question}, {answer}) END";
             Execute(sql);
 
-
+        
             // Insert noun_keysentence and verb_keysentence for each instance of a verb (many to many relationship)
-            foreach (var verb in lastVerbs)
+            foreach (var verb in NLP.lastVerbs)
             {
+                Debug.WriteLine(verb);
                 // Check if they are id's or text, if they are id's, insert them directly, else search for the verb where the word = verb
                 bool numericVerb = int.TryParse(verb, out int lastVerbId);
                 string check =
@@ -136,8 +142,9 @@ namespace dotNetTest.Models
                 Execute(sql);
             }
 
-            foreach (var noun in lastNouns)
+            foreach (var noun in NLP.lastNouns)
             {
+                Debug.WriteLine(noun);
                 // Same goes for here, except now for the noun
                 bool numericNoun = int.TryParse(noun, out int lastNounId);
                 string check =
