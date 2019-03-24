@@ -25,11 +25,13 @@ namespace dotNetTest.Controllers
             Stats.TimeStats(out List<string[]> yData, "SELECT count(*), DATEPART(year, [date]) FROM user_question GROUP BY DATEPART(year, [date])");
             //Month
             Stats.TimeStats(out List<string[]> mData, "SELECT count(*), FORMAT([date], 'Y') FROM user_question GROUP BY  FORMAT([date], 'Y')");
+            //Week
+            Stats.TimeStats(out List<string[]> wData, "SELECT count(*), DATEPART(wk, [date]) FROM user_question GROUP BY  DATEPART(wk, [date])");
             //Day
-
-            Stats.TimeStats(out List<string[]> dData, "SELECT count(*), [date] FROM user_question GROUP BY[date]");
+            Stats.TimeStats(out List<string[]> dData, "DECLARE @StartDate datetime = CONVERT(varchar(10),YEAR(GetDate())) DECLARE @EndDate datetime = SYSDATETIME() ; WITH days AS(SELECT DATEADD(DAY, n, DATEADD(DAY, DATEDIFF(DAY, 0, @StartDate), 0)) as d FROM(SELECT TOP(DATEDIFF(DAY, @StartDate, @EndDate) + 1) n = ROW_NUMBER() OVER(ORDER BY[object_id]) - 1 FROM sys.all_objects ORDER BY[object_id]) AS n) select count(t.user_id), CONVERT(date, days.d) FROM days LEFT OUTER JOIN user_question as t ON t.[date]>= days.d AND t.[date] < DATEADD(DAY, 1, days.d) Where d BETWEEN DATEADD(DAY, -7, GETDATE()) AND DATEADD(DAY, 1, GETDATE()) GROUP BY days.d ORDER BY days.d;");
             ViewData["DayData"] = dData;
             ViewData["MonthData"] = mData;
+            ViewData["WeekData"] = wData;
             ViewData["YearData"] = yData;
             Stats.UserStats(out List<string> users, out List<string> userCount, out List<string[]> userStatsList);
             ViewData["UserStat"] = users;
@@ -120,18 +122,21 @@ namespace dotNetTest.Controllers
             Stats.TimeStats(out List<string[]> yData, $"SELECT count(name), DATEPART(year, [date]) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY DATEPART(year, [date])");
             //Month
             Stats.TimeStats(out List<string[]> mData, $"SELECT count(name),  FORMAT([date], 'Y') FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY FORMAT([date], 'Y')");
+            //Week
+            Stats.TimeStats(out List<string[]> wData, "SELECT count(name), DATEPART(wk, [date]) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY DATEPART(wk, [date])");
             //Day
             Stats.TimeStats(out List<string[]> dData, $"SELECT count(name), date FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY date");
 
             TempData.Add("UserYearData", yData);
             TempData.Add("UserMonthData", mData);
+            TempData.Add("UserWeekData", wData);
             TempData.Add("UserDayData", dData);
             TempData.Add("UserAmountToday", amountToday.First());
             TempData.Add("UserAmountAll", amountAll.First());
 
 
 
-            return (RedirectToAction("Index", new { userAmountAll = amountAll, userAmountToday = amountToday, userDayData = dData, userMonthData = mData, userYearData = yData, }));
+            return (RedirectToAction("Index", new { userAmountAll = amountAll, userAmountToday = amountToday, userDayData = dData, userWeekData = wData,  userMonthData = mData, userYearData = yData, }));
         }
 
         [HttpPost]

@@ -85,7 +85,7 @@
     List<string[]> day = ViewBag.DayData;
     List<string[]> month = ViewBag.MonthData;
     List<string[]> year = ViewBag.YearData;
-
+    List<string[]> week = ViewBag.WeekData;
 
 
     List<string> nouns = ViewBag.Nouns;
@@ -174,6 +174,7 @@
 
                     <option value="year">Year</option>
                     <option value="month">Month</option>
+                    <option value="week">Week</option>
                     <option value="day" selected>Day</option>
                 </select>
 
@@ -348,6 +349,7 @@
 
                             <option value="year">Year</option>
                             <option value="month">Month</option>
+                            <option value="week">Week</option>
                             <option value="day" selected>Day</option>
                         </select>
 
@@ -563,6 +565,21 @@
                     }
 
             ]);
+        }else if (selection == 'week') {
+            var data = google.visualization.arrayToDataTable([
+                ['Amount of questions', 'Time(week)'],
+
+
+
+
+
+                @foreach (var arr in week)
+                        {
+                            
+                            @:['@(arr[1])', @(arr[0])],
+                        }
+
+            ]);
         }
         else{
             var data = google.visualization.arrayToDataTable([
@@ -755,6 +772,22 @@
                         @foreach (var arr in UserMonth)
                         {
 
+                            @:['@(arr[1])', @(arr[0])],
+                        }
+
+                    ]);
+                } else if (selection == 'week') {
+                      var data = google.visualization.arrayToDataTable([
+                        ['Amount of questions', 'Time(days)'],
+
+
+
+
+
+                        @foreach (var arr in UserDay)
+                        {
+                            Debug.WriteLine(arr[0]);
+                            Debug.WriteLine(arr[1]);
                             @:['@(arr[1])', @(arr[0])],
                         }
 
