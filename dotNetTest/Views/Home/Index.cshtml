@@ -18,6 +18,64 @@
     var systemStatList = ViewBag.SystemStatList;
 
 
+    List<string[]> QuestionYear = new List<string[]>() ;
+    List<string[]> QuestionMonth = new List<string[]>();
+    List<string[]> QuestionDay = new List<string[]>();
+    string QuestionAmountToday = "";
+    string QuestionAmountAll = "";
+
+    List<string[]> UserYear = new List<string[]>() ;
+    List<string[]> UserMonth = new List<string[]>();
+    List<string[]> UserDay = new List<string[]>();
+    string UserAmountToday = "";
+    string UserAmountAll = "";
+
+    bool questionBool = false;
+    bool userBool = false;
+    if (TempData.Count > 0)
+    {
+
+        try
+        {
+
+
+            QuestionYear = TempData["QuestionYearData"] as List<string[]>;
+            QuestionMonth = TempData["QuestionMonthData"] as List<string[]>;
+            QuestionDay = TempData["QuestionDayData"] as List<string[]>;
+            QuestionAmountToday = TempData["QuestionAmountToday"].ToString();
+            QuestionAmountAll = TempData["questionAmountAll"].ToString();
+            questionBool = true;
+        }
+        catch
+        {
+
+        }
+
+        try
+        {
+
+
+            UserYear = TempData["UserYearData"] as List<string[]>;
+            UserMonth = TempData["UserMonthData"] as List<string[]>;
+            UserDay = TempData["UserDayData"] as List<string[]>;
+            UserAmountToday = TempData["UserAmountToday"].ToString();
+            UserAmountAll = TempData["UserAmountAll"].ToString();
+            userBool = true;
+        }
+        catch
+        {
+
+        }
+
+    }
+
+
+
+
+
+
+
+
 
 
     var users = ViewBag.Users;
@@ -29,14 +87,6 @@
     List<string[]> year = ViewBag.YearData;
 
 
-    foreach (var arr in day)
-    {
-
-        Debug.Write(arr[1]);
-        Debug.Write(arr[0]);
-    }
-
-
 
     List<string> nouns = ViewBag.Nouns;
     List<string> verbs = ViewBag.Verbs;
@@ -46,15 +96,13 @@
 
 
 
-  
+
 
 
     var answer = "";
     var question = "";
 
-    //Todo: Form check if question or answer is exact duplicate
 
-    //Todo: delete functions
 }
 
 
@@ -228,144 +276,164 @@
     </div>
 </div>
 
-<!-- section all verbs, nouns, question and answer end -->
-<!-- Ask a question form. Condidered to add to Admin page -->
-<!--
-<div class="row">
-    <div class="form-group col-md-6">
-    @using (Html.BeginForm("Find", "Home", FormMethod.Post))
-    {
-            <div class="col-md-4">
-                <label>Ask a question</label>
+
+<div class="row md-4">
+    <div class="col-md-12">
+        <div class="d-flex data-grid flex-column box-shadow">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Question statistics</span>
             </div>
-            <div class="col-md-8">
-                <input class="col-md-12" type="text" name="answer" value="@Request.Form["answer"]" />
+        <div class="data-body p-2">
+            
+
+            
+            <div class="col-md-3">
+                <div class="d-flex data-grid flex-column box-shadow">
+                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#home"><span>Questions</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#menu1"><span>Users</span></a>
+                            </li>
+                              
+                        </ul>
+                           
+                        <div class="tab-content items">
+                            <div class="tab-pane container active col-md-12" id="home">
+
+                                <div class="list-group">
+                                    @using (Html.BeginForm("QuestionStats", "Home", FormMethod.Post))
+                                    {
+                                        foreach (var q in questions)
+                                        {
+                                            <button type="submit"  name="question" value="@q" class="list-group-item list-group-item-action">@q</button>
+                                        }
+                                    }
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane container fade  col-md-12" id="menu1">
+
+                                <div class="list-group">
+                                    @using (Html.BeginForm("UserStats", "Home", FormMethod.Post))
+                                    {
+                                        foreach (var u in users)
+                                        {
+                                            <button type="submit" name="user" value="@u" class="list-group-item list-group-item-action">@u</button>
+                                        }
+
+                                    }
+
+                                </div>
+                            </div>
+                                    
+                        </div>
+                           
+
+                    </div>
+                </div>
+
             </div>
-            <button class="btn" type="submit">submit</button>
+      
+            <div class="col-md-6">
+                <div class="d-flex data-grid flex-column box-shadow" id="height2">
+                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                        <span>QUESTIONS OVER TIME</span>
+                        <select id="timeSelectQuestion" class="form-control" onchange="drawLineChartQuestion()">
 
-        }
-    </div>
-</div>
+                            <option value="year">Year</option>
+                            <option value="month">Month</option>
+                            <option value="day" selected>Day</option>
+                        </select>
 
-<div class="row">
+                    </div>
+                    <div class="data-body p-0">
+                        <div id="line_statics_question" class="chart_div"></div>
+                    </div>
+                </div>
+            </div>
 
-    
+            <div class="col-md-3">
+                <div class="d-flex data-grid flex-column box-shadow h-100">
+                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                        <span>
+                            @if (questionBool)
+                            {
+                                @:Questions
+                            }
+                            else
+                            {
+                                @:Users
+                            }
+                        </span>
+                    </div>
+                    <div class="data-body p-2 text-light">
+                        <div class="d-flex flex-row w-100">
+                          
+                             
 
-    @using (Html.BeginForm("Insert", "Home", FormMethod.Post))
-    {
-        <fieldset>
-            <legend>New Q&A</legend>
-
-            <p>
-                <label for="genre">Question</label>
-                <input type="text" name="question" value="@Request.Form["question"]" />
-            </p>
-
-            <p>
-                <label for="year">Answer</label>
-                <input type="text" name="answer" value="@Request.Form["answer"]" />
-            </p>
-
-            <p><input type="submit" name="buttonSubmit" value="Add new question and answer" /></p>
-        </fieldset>
-    }
-
-
-    @using (Html.BeginForm("Remove", "Home", FormMethod.Post))
-    {
-        <div class="form-group col-md-4">
-            <label for="exampleFormControlSelect2">Vraag</label>
-            <select multiple class="form-control">
-
-                <option hidden value="@Request.Form["type"]">RemoveQuestion</option>
-                @foreach (var user in questions)
-                {
-                    <option value="@Request.Form["remove"]">@user</option>
-                }
-
-
-
-
-
-            </select>
-        </div>
-        <button class="btn btn-default" type="submit">Remove</button>
-    }
-
-
-    <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">users</label>
-        <select multiple class="form-control" id="exampleFormControlSelect2">
-            <option selecte d>none</option>
-            @foreach (var user in users)
-            {
-            <option>@user</option>
-            }
+                        
+                             
+                                    <div class="d-flex flex-column ml-2">
+                                        <div class="d-flex align-items border-bottom ">
+                                            @if (questionBool)
+                                            {
+                                                <span class="ft-40 p-2 pl-0">@QuestionAmountToday </span>
+                                                <small class="text-uppercase ft-11">Times the question has been asked today</small>
+                                            }
+                                            else
+                                            {
+                                                <span class="ft-40 p-2 pl-0">@UserAmountToday </span>
+                                                <small class="text-uppercase ft-11">Times the user has asked something today</small>
+                                            }
 
 
-
-
-
-        </select>
-    </div>
-
-    <div class="form-group col-md-4">
-        <label for="exampleFormControlSelect2">bs</label>
-        <select multiple class="form-control" id="exampleFormControlSelect2">
-            <option selected>none</option>
-            @foreach (var user in verbs)
-            {
-                <option></option>
-                }
+                                        </div>
+                                        <div class="d-flex align-items">
+                                            @if (questionBool)
+                                            {
+                                                <span class="ft-40 p-2 pl-0">@QuestionAmountAll</span>
+                                                <small class="text-uppercase ft-11">Times the question has been asked</small>
+                                            }
+                                            else
+                                            {
+                                                <span class="ft-40 p-2 pl-0">@UserAmountAll</span>
+                                                <small class="text-uppercase ft-11">Times the user has asked something</small>
+                                            }
 
 
 
+                                        </div>
+                                    </div>
 
+                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+                      
 
-
-            </select>
-        </div>
-
-
-
-
-
-        <div class="form-group col-md-4">
-            <label for="exampleFormControlSelect2">nouns</label>
-            <select multiple class="form-control" id="exampleFormControlSelect2">
-                <option selected>none</option>
-                @foreach (var user in nouns)
-                {
-                    <option>@user</option>
-                }
-
-            </select>
+                    </div>
+                </div>
+            </div>
         </div>
 
-    </div>
-    <div class="row">
-
-
-        <div class="form-group col-md-4">
-            <label for="exampleFormControlSelect2">Antwoord</label>
-            <select multiple class="form-control">
-                <option selected>none</option>
-                @foreach (var user in answers)
-                {
-                    <option id="insert">@user</option>
-                }
-
-
-            </select>
-        </div>
-
-    </div>
--->
+<style>
+    .items {
+                                            height:150px;
+                                                overflow-y: scroll;
+                                            }
+</style>
 
 <script src="~/Scripts/jquery-3.3.1.js"></script>
 <script type="text/javascript">
 
-
+   
     // Load the Visualization API and the corechart package.
     google.charts.load('current', { 'packages': ['corechart', 'bar', 'line'] });
 
@@ -378,6 +446,7 @@
 
     google.charts.setOnLoadCallback(drawQuestionStats);
     google.charts.setOnLoadCallback(drawSystemStats);
+    google.charts.setOnLoadCallback(drawLineChartQuestion);
 
     // Callback that creates and populates a data table,
     // instantiates the pie chart, passes in the data and
@@ -448,7 +517,7 @@
             bars: 'horizontal', // Required for Material Bar Charts.
             axes: {
                 x: {
-                    0: { side: 'top'} // Top x-axis.
+                    0: { side: 'top' } // Top x-axis.
                 }
             },
             bar: { groupWidth: "90%" },
@@ -466,7 +535,6 @@
         var selection = document.getElementById("timeSelect").value;
 
 
-
         if (selection == 'year') {
             var data = google.visualization.arrayToDataTable([
                 ['Amount of questions', 'Time(year)'],
@@ -474,23 +542,26 @@
 
 
                 @foreach (var arr in year)
-            {
+                {
 
-                @:['@(arr[1])', @(arr[0])],
-            }
+                    @:['@(arr[1])', @(arr[0])],
+                }
+
             ]);
         }
-        else if (selection == 'month') {
+        else
+        if (selection == 'month') {
             var data = google.visualization.arrayToDataTable([
                 ['Amount of questions', 'Time(month)'],
 
 
 
                 @foreach (var arr in month)
-            {
+                    {
 
-                @:['@(arr[1])', @(arr[0])],
-            }
+                        @:['@(arr[1])', @(arr[0])],
+                    }
+
             ]);
         }
         else{
@@ -500,10 +571,11 @@
 
 
                 @foreach (var arr in day)
-            {
+                     {
 
-                @:['@(arr[1])', @(arr[0])],
-            }
+                         @:['@(arr[1])', @(arr[0])],
+                     }
+
             ]);
         }
 
@@ -521,7 +593,7 @@
 
         chart.draw(data, options);
 
-        }
+    }
 
 
 
@@ -594,6 +666,136 @@
     }
 
 
+
+    function drawLineChartQuestion() {
+
+        var selection = document.getElementById("timeSelectQuestion").value;
+
+
+        @if (!(QuestionYear == null))
+        {
+
+            <text>
+
+
+
+
+
+
+                if (selection == 'year') {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Amount of questions', 'Time(year)'],
+
+                        @foreach (var arr in QuestionYear)
+                        {
+
+                            @:['@(arr[1])', @(arr[0])],
+                        }
+
+                    ]);
+                } else if (selection == 'month') {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Amount of questions', 'Time(month)'],
+
+
+
+                        @foreach (var arr in QuestionMonth)
+                        {
+
+                            @:['@(arr[1])', @(arr[0])],
+                        }
+
+                    ]);
+                } else {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Amount of questions', 'Time(days)'],
+
+
+
+
+
+                        @foreach (var arr in QuestionDay)
+                        {
+                            Debug.WriteLine(arr[0]);
+                            Debug.WriteLine(arr[1]);
+                            @:['@(arr[1])', @(arr[0])],
+                        }
+
+                    ]);
+                }
+
+
+
+            </text>
+
+
+        }
+        @if (!(UserYear == null))
+            {
+
+            <text>
+        
+                if (selection == 'year') {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Amount of questions', 'Time(year)'],
+
+                        @foreach (var arr in UserYear)
+                        {
+
+                            @:['@(arr[1])', @(arr[0])],
+                        }
+
+                    ]);
+                } else if (selection == 'month') {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Amount of questions', 'Time(month)'],
+
+
+
+                        @foreach (var arr in UserMonth)
+                        {
+
+                            @:['@(arr[1])', @(arr[0])],
+                        }
+
+                    ]);
+                } else {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Amount of questions', 'Time(days)'],
+
+
+
+
+
+                        @foreach (var arr in UserDay)
+                        {
+                            Debug.WriteLine(arr[0]);
+                            Debug.WriteLine(arr[1]);
+                            @:['@(arr[1])', @(arr[0])],
+                        }
+
+                    ]);
+                }
+
+
+            </text>
+        }
+
+        var options = {
+            title: 'Amount of asked questions over time',
+            height: 200,
+            curveType: 'function',
+            backgroundColor: '#26262b',
+            colors: ['#50d4b5'],
+            legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('line_statics_question'));
+
+        chart.draw(data, options);
+
+        
+    }
 
 
 </script>

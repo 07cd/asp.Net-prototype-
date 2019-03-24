@@ -50,6 +50,11 @@ namespace dotNetTest.Models
             DisConnect();
         }
 
+        /// <summary>
+        /// Method for getting stats for over a period of time, gets 2 dimensional data for graph use
+        /// </summary>
+        /// <param name="timeStats"></param>
+        /// <param name="query"></param>
         public static void TimeStats(out List<string[]> timeStats, string query)
         {
             Connect();

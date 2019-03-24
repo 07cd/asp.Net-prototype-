@@ -12,8 +12,8 @@ namespace dotNetTest.Controllers
 {
     public class HomeController : Controller
     {
-     
-
+        
+      
         public ActionResult Index(string answer)
         {
             ViewData["Users"] = Database.Get("SELECT * FROM [user]", 1);
@@ -24,8 +24,9 @@ namespace dotNetTest.Controllers
             //Year
             Stats.TimeStats(out List<string[]> yData, "SELECT count(*), DATEPART(year, [date]) FROM user_question GROUP BY DATEPART(year, [date])");
             //Month
-            Stats.TimeStats(out List<string[]> mData, "SELECT count(*), FORMAT([date], 'Y') FROM user_question GROUP BY  FORMAT([date], 'Y')"); 
+            Stats.TimeStats(out List<string[]> mData, "SELECT count(*), FORMAT([date], 'Y') FROM user_question GROUP BY  FORMAT([date], 'Y')");
             //Day
+
             Stats.TimeStats(out List<string[]> dData, "SELECT count(*), [date] FROM user_question GROUP BY[date]");
             ViewData["DayData"] = dData;
             ViewData["MonthData"] = mData;
@@ -38,7 +39,11 @@ namespace dotNetTest.Controllers
             ViewData["SystemStat"] = questions;
             ViewData["SystemStatCount"] = questionCount;
             ViewData["SystemStatList"] = systemStatsList;
+
+          
+
             return View();
+            
         }
 
         public ActionResult About()
@@ -60,13 +65,7 @@ namespace dotNetTest.Controllers
 
             return View();
         }
-        public ActionResult UserStats()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
+       
         /// <summary>
         /// Post controller for inserting the question and answer
         /// </summary>
@@ -107,7 +106,61 @@ namespace dotNetTest.Controllers
             return RedirectToAction("Index");
         }
 
-       
+        [HttpPost]
+        public ActionResult UserStats(string user)
+        {
+            string amountToday = Database.Get($"SELECT count(*) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id  WHERE date = (CONVERT (date, GETDATE())) AND name = '{user}'", 0).First().ToString();
+            string amountAll = Database
+                .Get(
+                    $"SELECT count(*) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}'",
+                    0).First().ToString();
+
+
+            //Year
+            Stats.TimeStats(out List<string[]> yData, $"SELECT count(name), DATEPART(year, [date]) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY DATEPART(year, [date])");
+            //Month
+            Stats.TimeStats(out List<string[]> mData, $"SELECT count(name),  FORMAT([date], 'Y') FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY FORMAT([date], 'Y')");
+            //Day
+            Stats.TimeStats(out List<string[]> dData, $"SELECT count(name), date FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY date");
+
+            TempData.Add("UserYearData", yData);
+            TempData.Add("UserMonthData", mData);
+            TempData.Add("UserDayData", dData);
+            TempData.Add("UserAmountToday", amountToday.First());
+            TempData.Add("UserAmountAll", amountAll.First());
+
+
+
+            return (RedirectToAction("Index", new { userAmountAll = amountAll, userAmountToday = amountToday, userDayData = dData, userMonthData = mData, userYearData = yData, }));
+        }
+
+        [HttpPost]
+        public ActionResult QuestionStats(string question)
+        {
+            
+            
+         
+            string amountToday = Database.Get($"SELECT count(question) FROM user_question JOIN question ON user_question.question_id = question.id WHERE date = (CONVERT (date, GETDATE())) AND question = '{question}'", 0).First().ToString();
+            string amountAll = Database.Get($"SELECT count(question) FROM user_question JOIN question ON user_question.question_id = question.id WHERE question = '{question}'", 0).First().ToString();
+
+
+            //Year
+            Stats.TimeStats(out List<string[]> yData, $"SELECT count(question), DATEPART(year, [date]) FROM user_question JOIN question ON user_question.question_id = question.id WHERE question = '{question}' GROUP BY DATEPART(year, [date])");
+            //Month
+            Stats.TimeStats(out List<string[]> mData, $"SELECT count(question),  FORMAT([date], 'Y') FROM user_question JOIN question ON user_question.question_id = question.id WHERE question = '{question}' GROUP BY FORMAT([date], 'Y')");
+            //Day
+            Stats.TimeStats(out List<string[]> dData, $"SELECT count(question), date FROM user_question JOIN question ON user_question.question_id = question.id WHERE question = '{question}' GROUP BY date");
+            
+            TempData.Add("QuestionYearData", yData);
+            TempData.Add("QuestionMonthData", mData);
+            TempData.Add("QuestionDayData", dData);
+            TempData.Add("QuestionAmountToday", amountToday);
+            TempData.Add("questionAmountAll", amountAll);
+
+            
+            
+            return (RedirectToAction("Index", new { questionAmountAll = amountAll, questionAmountToday = amountToday, questionDayData = dData,  questionMonthData = mData, questionYearData = yData,  }));
+        }
 
     }
 }
