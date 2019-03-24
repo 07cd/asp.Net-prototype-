@@ -20,12 +20,14 @@
 
     List<string[]> QuestionYear = new List<string[]>() ;
     List<string[]> QuestionMonth = new List<string[]>();
+    List<string[]> QuestionWeek = new List<string[]>();
     List<string[]> QuestionDay = new List<string[]>();
     string QuestionAmountToday = "";
     string QuestionAmountAll = "";
 
     List<string[]> UserYear = new List<string[]>() ;
     List<string[]> UserMonth = new List<string[]>();
+    List<string[]> UserWeek = new List<string[]>();
     List<string[]> UserDay = new List<string[]>();
     string UserAmountToday = "";
     string UserAmountAll = "";
@@ -41,9 +43,10 @@
 
             QuestionYear = TempData["QuestionYearData"] as List<string[]>;
             QuestionMonth = TempData["QuestionMonthData"] as List<string[]>;
+            QuestionWeek = TempData["QuestionWeekData"] as List<string[]>;
             QuestionDay = TempData["QuestionDayData"] as List<string[]>;
             QuestionAmountToday = TempData["QuestionAmountToday"].ToString();
-            QuestionAmountAll = TempData["questionAmountAll"].ToString();
+            QuestionAmountAll = TempData["QuestionAmountAll"].ToString();
             questionBool = true;
         }
         catch
@@ -57,6 +60,7 @@
 
             UserYear = TempData["UserYearData"] as List<string[]>;
             UserMonth = TempData["UserMonthData"] as List<string[]>;
+            UserWeek = TempData["UserWeekData"] as List<string[]>;
             UserDay = TempData["UserDayData"] as List<string[]>;
             UserAmountToday = TempData["UserAmountToday"].ToString();
             UserAmountAll = TempData["UserAmountAll"].ToString();
@@ -435,7 +439,7 @@
 <script src="~/Scripts/jquery-3.3.1.js"></script>
 <script type="text/javascript">
 
-   
+
     // Load the Visualization API and the corechart package.
     google.charts.load('current', { 'packages': ['corechart', 'bar', 'line'] });
 
@@ -575,7 +579,7 @@
 
                 @foreach (var arr in week)
                         {
-                            
+
                             @:['@(arr[1])', @(arr[0])],
                         }
 
@@ -701,7 +705,7 @@
 
                 if (selection == 'year') {
                     var data = google.visualization.arrayToDataTable([
-                        ['Amount of questions', 'Time(year)'],
+                        ['Amount of questions', 'Time(years)'],
 
                         @foreach (var arr in QuestionYear)
                         {
@@ -712,11 +716,26 @@
                     ]);
                 } else if (selection == 'month') {
                     var data = google.visualization.arrayToDataTable([
-                        ['Amount of questions', 'Time(month)'],
+                        ['Amount of questions', 'Time(months)'],
 
 
 
                         @foreach (var arr in QuestionMonth)
+                        {
+
+                            @:['@(arr[1])', @(arr[0])],
+                        }
+
+                    ]);
+                }else if (selection == 'week') {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Amount of questions', 'Time(weeks)'],
+
+
+
+
+
+                        @foreach (var arr in QuestionWeek)
                         {
 
                             @:['@(arr[1])', @(arr[0])],
@@ -733,8 +752,7 @@
 
                         @foreach (var arr in QuestionDay)
                         {
-                            Debug.WriteLine(arr[0]);
-                            Debug.WriteLine(arr[1]);
+
                             @:['@(arr[1])', @(arr[0])],
                         }
 
@@ -751,10 +769,10 @@
             {
 
             <text>
-        
+
                 if (selection == 'year') {
                     var data = google.visualization.arrayToDataTable([
-                        ['Amount of questions', 'Time(year)'],
+                        ['Amount of questions', 'Time(years)'],
 
                         @foreach (var arr in UserYear)
                         {
@@ -765,7 +783,7 @@
                     ]);
                 } else if (selection == 'month') {
                     var data = google.visualization.arrayToDataTable([
-                        ['Amount of questions', 'Time(month)'],
+                        ['Amount of questions', 'Time(months)'],
 
 
 
@@ -778,17 +796,17 @@
                     ]);
                 } else if (selection == 'week') {
                       var data = google.visualization.arrayToDataTable([
-                        ['Amount of questions', 'Time(days)'],
+                        ['Amount of questions', 'Time(weeks)'],
 
 
 
 
 
-                        @foreach (var arr in UserDay)
+                        @foreach (var arr in UserWeek)
                         {
                             Debug.WriteLine(arr[0]);
                             Debug.WriteLine(arr[1]);
-                            @:['@(arr[1])', @(arr[0])],
+                             @:['@(arr[1])', @(arr[0])],
                         }
 
                     ]);
@@ -827,7 +845,7 @@
 
         chart.draw(data, options);
 
-        
+
     }
 
 

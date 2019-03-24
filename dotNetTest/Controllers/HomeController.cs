@@ -24,9 +24,9 @@ namespace dotNetTest.Controllers
             //Year
             Stats.TimeStats(out List<string[]> yData, "SELECT count(*), DATEPART(year, [date]) FROM user_question GROUP BY DATEPART(year, [date])");
             //Month
-            Stats.TimeStats(out List<string[]> mData, "SELECT count(*), FORMAT([date], 'Y') FROM user_question GROUP BY  FORMAT([date], 'Y')");
+            Stats.TimeStats(out List<string[]> mData, "DECLARE @StartDate datetime = CONVERT(varchar(10),YEAR(GetDate())-1) DECLARE @EndDate datetime = SYSDATETIME() ;WITH months AS (SELECT DATEADD(MONTH, n, DATEADD(MONTH, DATEDIFF(MONTH, 0, @StartDate), 0)) as d FROM(SELECT TOP(DATEDIFF(MONTH, @StartDate, @EndDate) + 1) n = ROW_NUMBER() OVER(ORDER BY[object_id]) - 1 FROM sys.all_objects ORDER BY[object_id]) AS n) select count(t.user_id),  FORMAT(months.d, 'Y') FROM months LEFT OUTER JOIN user_question as t ON t.[date]>= months.d AND t.[date] < DATEADD(MONTH, 1, months.d)  Where d BETWEEN DATEADD(MONTH, -12, GETDATE()) AND DATEADD(MONTH, 0, GETDATE()) GROUP BY months.d ORDER BY months.d;");
             //Week
-            Stats.TimeStats(out List<string[]> wData, "SELECT count(*), DATEPART(wk, [date]) FROM user_question GROUP BY  DATEPART(wk, [date])");
+            Stats.TimeStats(out List<string[]> wData, "DECLARE @StartDate datetime = CONVERT(varchar(10),YEAR(GetDate())-1) DECLARE @EndDate datetime = SYSDATETIME() ;WITH weeks AS (SELECT DATEADD(WEEK, n, DATEADD(Week, DATEDIFF(WEEK, 0, @StartDate), 0)) as d FROM(SELECT TOP(DATEDIFF(WEEK, @StartDate, @EndDate) + 1) n = ROW_NUMBER() OVER(ORDER BY[object_id]) - 1 FROM sys.all_objects ORDER BY[object_id]) AS n) select count(t.user_id), DATEPART( isowk, weeks.d) FROM weeks LEFT OUTER JOIN user_question as t ON t.[date]>= weeks.d AND t.[date] < DATEADD(WEEK, 1, weeks.d) Where d BETWEEN DATEADD(WEEK, -52, GETDATE()) AND DATEADD(WEEK, 0, GETDATE()) GROUP BY weeks.d ORDER BY weeks.d;");
             //Day
             Stats.TimeStats(out List<string[]> dData, "DECLARE @StartDate datetime = CONVERT(varchar(10),YEAR(GetDate())) DECLARE @EndDate datetime = SYSDATETIME() ; WITH days AS(SELECT DATEADD(DAY, n, DATEADD(DAY, DATEDIFF(DAY, 0, @StartDate), 0)) as d FROM(SELECT TOP(DATEDIFF(DAY, @StartDate, @EndDate) + 1) n = ROW_NUMBER() OVER(ORDER BY[object_id]) - 1 FROM sys.all_objects ORDER BY[object_id]) AS n) select count(t.user_id), CONVERT(date, days.d) FROM days LEFT OUTER JOIN user_question as t ON t.[date]>= days.d AND t.[date] < DATEADD(DAY, 1, days.d) Where d BETWEEN DATEADD(DAY, -7, GETDATE()) AND DATEADD(DAY, 1, GETDATE()) GROUP BY days.d ORDER BY days.d;");
             ViewData["DayData"] = dData;
@@ -112,18 +112,15 @@ namespace dotNetTest.Controllers
         public ActionResult UserStats(string user)
         {
             string amountToday = Database.Get($"SELECT count(*) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id  WHERE date = (CONVERT (date, GETDATE())) AND name = '{user}'", 0).First().ToString();
-            string amountAll = Database
-                .Get(
-                    $"SELECT count(*) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}'",
-                    0).First().ToString();
+            string amountAll = Database.Get($"SELECT count(name) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}'",0).First().ToString();
 
-
+            
             //Year
             Stats.TimeStats(out List<string[]> yData, $"SELECT count(name), DATEPART(year, [date]) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY DATEPART(year, [date])");
             //Month
             Stats.TimeStats(out List<string[]> mData, $"SELECT count(name),  FORMAT([date], 'Y') FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY FORMAT([date], 'Y')");
             //Week
-            Stats.TimeStats(out List<string[]> wData, "SELECT count(name), DATEPART(wk, [date]) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY DATEPART(wk, [date])");
+            Stats.TimeStats(out List<string[]> wData, $"SELECT count(name), DATEPART(wk, [date]) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY DATEPART(wk, [date])");
             //Day
             Stats.TimeStats(out List<string[]> dData, $"SELECT count(name), date FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}' GROUP BY date");
 
@@ -131,8 +128,8 @@ namespace dotNetTest.Controllers
             TempData.Add("UserMonthData", mData);
             TempData.Add("UserWeekData", wData);
             TempData.Add("UserDayData", dData);
-            TempData.Add("UserAmountToday", amountToday.First());
-            TempData.Add("UserAmountAll", amountAll.First());
+            TempData.Add("UserAmountToday", amountToday);
+            TempData.Add("UserAmountAll", amountAll);
 
 
 
@@ -153,18 +150,21 @@ namespace dotNetTest.Controllers
             Stats.TimeStats(out List<string[]> yData, $"SELECT count(question), DATEPART(year, [date]) FROM user_question JOIN question ON user_question.question_id = question.id WHERE question = '{question}' GROUP BY DATEPART(year, [date])");
             //Month
             Stats.TimeStats(out List<string[]> mData, $"SELECT count(question),  FORMAT([date], 'Y') FROM user_question JOIN question ON user_question.question_id = question.id WHERE question = '{question}' GROUP BY FORMAT([date], 'Y')");
+            //Week
+            Stats.TimeStats(out List<string[]> wData, $"SELECT count(question),  DATEPART(wk, [date]) FROM user_question JOIN question ON user_question.question_id = question.id WHERE question = '{question}' GROUP BY DATEPART(wk, [date])");
             //Day
             Stats.TimeStats(out List<string[]> dData, $"SELECT count(question), date FROM user_question JOIN question ON user_question.question_id = question.id WHERE question = '{question}' GROUP BY date");
             
             TempData.Add("QuestionYearData", yData);
             TempData.Add("QuestionMonthData", mData);
+            TempData.Add("QuestionWeekData", wData);
             TempData.Add("QuestionDayData", dData);
             TempData.Add("QuestionAmountToday", amountToday);
-            TempData.Add("questionAmountAll", amountAll);
+            TempData.Add("QuestionAmountAll", amountAll);
 
             
             
-            return (RedirectToAction("Index", new { questionAmountAll = amountAll, questionAmountToday = amountToday, questionDayData = dData,  questionMonthData = mData, questionYearData = yData,  }));
+            return (RedirectToAction("Index", new { questionAmountAll = amountAll, questionAmountToday = amountToday, questionDayData = dData, questionWeekData = wData,  questionMonthData = mData, questionYearData = yData,  }));
         }
 
     }
