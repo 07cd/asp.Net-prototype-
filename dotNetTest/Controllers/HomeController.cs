@@ -50,7 +50,7 @@ namespace dotNetTest.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "General information";
 
             return View();
         }

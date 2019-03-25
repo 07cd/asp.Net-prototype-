@@ -1,27 +1,113 @@
 ﻿@{
     ViewBag.Title = "About";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<div class="text-wrap pb-3 ">
+    <h3>@ViewBag.Message</h3>
 
+    <p class="mb-3 mt-3 ft-17 text-grey">
+        This panel is to add a question that can be used in the bot. use the form to do that. The right side of the page shows how many question and
+        answer are added today on @DateTime.Now.Day @DateTime.Now.ToString("MMMM").
+    </p>
 
-@{
-    string output = "";
-    if (TempData.Count > 0)
-    {
-        try
-        {
-            output = TempData["answer"].ToString();
-        }
-        catch
-        {
-            output = "Invalid input";
-        }
-    }
-}
+</div>
+<hr class="divid"/>
+<div class="row mt-4 pt-4">
+    <div class="col-md-9">
+        <div class="d-flex  flex-column  ">
 
+            <div class="data-header text-uppercase p-2 home-border-bottom">
+                <h4>Add questions</h4>
+            </div>
+            <div class="data-body p-2 w-100">
+                <p class="p-3  mb-5 msg-wrap ">
+                    Add a question here. After the question has been saved, users can ask the question. Important to mention that it is possible from the users point 
+                    to ask different kind of questions for one answer. 
+                </p>
+                @using (Html.BeginForm("Insert", "Home", FormMethod.Post))
+                {
+                    <div class="form-group  w-100">
+                        <label class="text-uppercase text-grey">Question</label>
+                        <input type="text" class="form-control input-text home-input" name="question" value="@Request.Form["question"]" placeholder="your question">
+                    </div>
+                    <div class="form-group w-100 mt-4">
+                        <label class="text-uppercase text-grey">Answer</label>
+                        <input type="text" name="answer" value="@Request.Form["answer"]" class="form-control input-text home-input" placeholder="your answer">
+                    </div>
+                    <div class="form-group text-right mt-4">
+                        <input type="submit" name="buttonSubmit" class="btn home-btn" value="SAVE"/>
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="d-flex flex-column">
+            <div class="data-header text-uppercase p-2 home-border-bottom">
+                <h4>Q&A today</h4>
+            </div>
+            <div class="data-body p-2">
+                <div class="qa-box d-flex flex-column align-items justify-content">
+                    <span class="ft-16 bold">Questions</span>
+                    <span class="ft-60">2</span>
+                </div>
+                <div class="qa-box d-flex flex-column align-items justify-content mt-2">
+                    <span class="ft-16 bold">Answer</span>
+                    <span class="ft-60">4</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="divid" />
+
+<div class="row mt-4 pt-4">
+    <div class="col-md-9">
+        <div class="d-flex  flex-column  ">
+
+            <div class="data-header text-uppercase p-2 home-border-bottom">
+                <h4>Ask Clippy</h4>
+            </div>
+            <div class="data-body p-2 w-100">
+
+                <p class="mb-3 mt-3 pb-4 border-bottom text-grey">
+                    After you have add a question you can use this section to test if the question and answer works. In other words this is your personal test area.
+                </p>
+                @using (Html.BeginForm("Find", "Home", FormMethod.Post))
+                {
+                    <div class="form-group mt-4 w-100">
+                        <label class="text-uppercase text-grey">What is the question that you want to ask Clippy 07?</label>
+                        <input type="text" class="form-control input-text home-input" name="answer" value="@Request.Form["answer"]" placeholder="your question">
+                    </div>
+                    <div class="form-group text-right mt-4">
+                        <button class="btn home-btn" type="submit">Submit</button>
+                    </div>
+
+                }
+                @{
+                    string output = "";
+                    if (TempData.Count > 0)
+                    {
+                        try
+                        {
+                            output = TempData["answer"].ToString();
+                        }
+                        catch
+                        {
+                            output = "Invalid input";
+                        }
+                    }
+                }
+                <h4>@output</h4>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+<!--
 <h1>Output: @output</h1>
 @using (Html.BeginForm("Find", "Home", FormMethod.Post))
 {
@@ -78,3 +164,4 @@
 @*     </div> *@
 @*     <button class="btn btn-default" type="submit">Remove</button> *@
 @* } *@
+-->

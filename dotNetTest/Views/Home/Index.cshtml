@@ -18,14 +18,14 @@
     var systemStatList = ViewBag.SystemStatList;
 
 
-    List<string[]> QuestionYear = new List<string[]>() ;
+    List<string[]> QuestionYear = new List<string[]>();
     List<string[]> QuestionMonth = new List<string[]>();
     List<string[]> QuestionWeek = new List<string[]>();
     List<string[]> QuestionDay = new List<string[]>();
     string QuestionAmountToday = "";
     string QuestionAmountAll = "";
 
-    List<string[]> UserYear = new List<string[]>() ;
+    List<string[]> UserYear = new List<string[]>();
     List<string[]> UserMonth = new List<string[]>();
     List<string[]> UserWeek = new List<string[]>();
     List<string[]> UserDay = new List<string[]>();
@@ -143,15 +143,15 @@
     </div>
 </div>
 
-<!-- User and line chart begin -->
+<!-- User and line chart begin style="height: 334.8px" -->
 <div class="row mb-4" style="margin-top: 2em;">
-    <div class="col-md-4" style="height: 236.8px">
+    <div class="col-md-4" style="height: 285.233px">
         <div class="d-flex data-grid flex-column box-shadow h-100">
             <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
                 <span>Users</span>
             </div>
-            <div class="data-body p-2 text-light">
-                <div class="d-flex flex-row w-100">
+            <div class="data-body p-2 text-light h-100">
+                <div class="d-flex flex-row w-100 justify-content align-items" style="height: 90%;">
                     <div class="d-flex justify-content align-items p-3">
                         <span class="ft-60"><i class="fas fa-user"></i></span>
 
@@ -174,16 +174,21 @@
         <div class="d-flex data-grid flex-column box-shadow" id="height2">
             <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
                 <span>QUESTIONS OVER TIME</span>
-                <select id="timeSelect" class="form-control" onchange="drawLineChart()">
-
-                    <option value="year">Year</option>
-                    <option value="month">Month</option>
-                    <option value="week">Week</option>
-                    <option value="day" selected>Day</option>
-                </select>
-
             </div>
+
             <div class="data-body p-0">
+                <div class="d-flex w-100 justify-content-around align-items p-2">
+                    <span class="">
+                        Amount of asked questions (y) over time (x)
+                    </span>
+                    <select id="timeSelect" class="form-control own-select" onchange="drawLineChart()" style="width: auto !important; padding: 0 2em !important;">
+                        <option value="year">Year</option>
+                        <option value="month">Month</option>
+                        <option value="week">Week</option>
+                        <option value="day" selected>Day</option>
+                    </select>
+                </div>
+
                 <div id="line_statics" class="chart_div"></div>
             </div>
         </div>
@@ -192,7 +197,7 @@
 <!--           -->
 
 
-<div class="row mb-4">
+<div class="row mb-4" style="margin-top: 2em;">
     <div class="col-md-6">
         <div class="d-flex data-grid flex-column box-shadow">
             <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
@@ -225,7 +230,7 @@
                 <span>Verbs</span>
             </div>
             <div class="data-body p-2">
-                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                <select multiple class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
                     @foreach (var v in verbs)
                     {
                         <option>@v</option>
@@ -240,7 +245,7 @@
                 <span>Nouns</span>
             </div>
             <div class="data-body p-2">
-                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                <select multiple class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
                     @foreach (var n in nouns)
                     {
                         <option>@n</option>
@@ -255,7 +260,7 @@
                 <span>Question</span>
             </div>
             <div class="data-body p-2">
-                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                <select multiple class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
                     @foreach (var q in questions)
                     {
                         <option>@q</option>
@@ -270,7 +275,7 @@
                 <span>Answer</span>
             </div>
             <div class="data-body p-2">
-                <select multiple class="form-control bg-transparent no-border text-white static-select p-0" size="5">
+                <select multiple class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
                     @foreach (var a in answers)
                     {
                         <option>@a</option>
@@ -282,158 +287,158 @@
 </div>
 
 
-<div class="row md-4">
+<div class="row md-4" style="margin-top: 2em;">
     <div class="col-md-12">
         <div class="d-flex data-grid flex-column box-shadow">
             <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
                 <span>Question statistics</span>
             </div>
-        <div class="data-body p-2">
-            
+            <div class="data-body p-2">
 
-            
-            <div class="col-md-3">
-                <div class="d-flex data-grid flex-column box-shadow">
-                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                        <ul class="nav nav-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#home"><span>Questions</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#menu1"><span>Users</span></a>
-                            </li>
-                              
-                        </ul>
-                           
-                        <div class="tab-content items">
-                            <div class="tab-pane container active col-md-12" id="home">
 
-                                <div class="list-group">
-                                    @using (Html.BeginForm("QuestionStats", "Home", FormMethod.Post))
-                                    {
-                                        foreach (var q in questions)
+
+                <div class="col-md-3">
+                    <div class="d-flex data-grid flex-column box-shadow">
+                        <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#home"><span>Questions</span></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#menu1"><span>Users</span></a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content items">
+                                <div class="tab-pane container active col-md-12" id="home">
+
+                                    <div class="list-group">
+                                        @using (Html.BeginForm("QuestionStats", "Home", FormMethod.Post))
                                         {
-                                            <button type="submit"  name="question" value="@q" class="list-group-item list-group-item-action">@q</button>
-                                        }
-                                    }
-
-
-                                </div>
-
-                            </div>
-
-                            <div class="tab-pane container fade  col-md-12" id="menu1">
-
-                                <div class="list-group">
-                                    @using (Html.BeginForm("UserStats", "Home", FormMethod.Post))
-                                    {
-                                        foreach (var u in users)
-                                        {
-                                            <button type="submit" name="user" value="@u" class="list-group-item list-group-item-action">@u</button>
+                                            foreach (var q in questions)
+                                            {
+                                                <button type="submit" name="question" value="@q" class="list-group-item list-group-item-action">@q</button>
+                                            }
                                         }
 
-                                    }
 
-                                </div>
-                            </div>
-                                    
-                        </div>
-                           
-
-                    </div>
-                </div>
-
-            </div>
-      
-            <div class="col-md-6">
-                <div class="d-flex data-grid flex-column box-shadow" id="height2">
-                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                        <span>QUESTIONS OVER TIME</span>
-                        <select id="timeSelectQuestion" class="form-control" onchange="drawLineChartQuestion()">
-
-                            <option value="year">Year</option>
-                            <option value="month">Month</option>
-                            <option value="week">Week</option>
-                            <option value="day" selected>Day</option>
-                        </select>
-
-                    </div>
-                    <div class="data-body p-0">
-                        <div id="line_statics_question" class="chart_div"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="d-flex data-grid flex-column box-shadow h-100">
-                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                        <span>
-                            @if (questionBool)
-                            {
-                                @:Questions
-                            }
-                            else
-                            {
-                                @:Users
-                            }
-                        </span>
-                    </div>
-                    <div class="data-body p-2 text-light">
-                        <div class="d-flex flex-row w-100">
-                          
-                             
-
-                        
-                             
-                                    <div class="d-flex flex-column ml-2">
-                                        <div class="d-flex align-items border-bottom ">
-                                            @if (questionBool)
-                                            {
-                                                <span class="ft-40 p-2 pl-0">@QuestionAmountToday </span>
-                                                <small class="text-uppercase ft-11">Times the question has been asked today</small>
-                                            }
-                                            else
-                                            {
-                                                <span class="ft-40 p-2 pl-0">@UserAmountToday </span>
-                                                <small class="text-uppercase ft-11">Times the user has asked something today</small>
-                                            }
-
-
-                                        </div>
-                                        <div class="d-flex align-items">
-                                            @if (questionBool)
-                                            {
-                                                <span class="ft-40 p-2 pl-0">@QuestionAmountAll</span>
-                                                <small class="text-uppercase ft-11">Times the question has been asked</small>
-                                            }
-                                            else
-                                            {
-                                                <span class="ft-40 p-2 pl-0">@UserAmountAll</span>
-                                                <small class="text-uppercase ft-11">Times the user has asked something</small>
-                                            }
-
-
-
-                                        </div>
                                     </div>
 
-                         
+                                </div>
+
+                                <div class="tab-pane container fade  col-md-12" id="menu1">
+
+                                    <div class="list-group">
+                                        @using (Html.BeginForm("UserStats", "Home", FormMethod.Post))
+                                        {
+                                            foreach (var u in users)
+                                            {
+                                                <button type="submit" name="user" value="@u" class="list-group-item list-group-item-action">@u</button>
+                                            }
+
+                                        }
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="d-flex data-grid flex-column box-shadow" id="height2">
+                        <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                            <span>QUESTIONS OVER TIME</span>
+                            <select id="timeSelectQuestion" class="form-control" onchange="drawLineChartQuestion()">
+
+                                <option value="year">Year</option>
+                                <option value="month">Month</option>
+                                <option value="week">Week</option>
+                                <option value="day" selected>Day</option>
+                            </select>
+
+                        </div>
+                        <div class="data-body p-0">
+                            <div id="line_statics_question" class="chart_div"></div>
                         </div>
                     </div>
                 </div>
-            </div>
-                      
 
+                <div class="col-md-3">
+                    <div class="d-flex data-grid flex-column box-shadow h-100">
+                        <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                            <span>
+                                @if (questionBool)
+                                {
+                                    @:Questions
+                                }
+                                else
+                                {
+                                    @:Users
+                                }
+                            </span>
+                        </div>
+                        <div class="data-body p-2 text-light">
+                            <div class="d-flex flex-row w-100">
+
+
+
+
+
+                                <div class="d-flex flex-column ml-2">
+                                    <div class="d-flex align-items border-bottom ">
+                                        @if (questionBool)
+                                        {
+                                            <span class="ft-40 p-2 pl-0">@QuestionAmountToday </span>
+                                            <small class="text-uppercase ft-11">Times the question has been asked today</small>
+                                        }
+                                        else
+                                        {
+                                            <span class="ft-40 p-2 pl-0">@UserAmountToday </span>
+                                            <small class="text-uppercase ft-11">Times the user has asked something today</small>
+                                        }
+
+
+                                    </div>
+                                    <div class="d-flex align-items">
+                                        @if (questionBool)
+                                        {
+                                            <span class="ft-40 p-2 pl-0">@QuestionAmountAll</span>
+                                            <small class="text-uppercase ft-11">Times the question has been asked</small>
+                                        }
+                                        else
+                                        {
+                                            <span class="ft-40 p-2 pl-0">@UserAmountAll</span>
+                                            <small class="text-uppercase ft-11">Times the user has asked something</small>
+                                        }
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
+    </div>
+</div>
 
 <style>
     .items {
-                                            height:150px;
-                                                overflow-y: scroll;
-                                            }
+        height: 150px;
+        overflow-y: scroll;
+    }
 </style>
 
 <script src="~/Scripts/jquery-3.3.1.js"></script>
@@ -543,14 +548,14 @@
 
         if (selection == 'year') {
             var data = google.visualization.arrayToDataTable([
-                ['Amount of questions', 'Time(year)'],
+                ['Q', 'Time(year)'],
 
 
 
                 @foreach (var arr in year)
                 {
 
-                    @:['@(arr[1])', @(arr[0])],
+                    @:['@(arr[1].Substring(0, 1))', @(arr[0])],
                 }
 
             ]);
@@ -565,7 +570,7 @@
                 @foreach (var arr in month)
                     {
 
-                        @:['@(arr[1])', @(arr[0])],
+                        @:['@(arr[1].Substring(0, 1))',  @(arr[0])],
                     }
 
             ]);
@@ -580,7 +585,7 @@
                 @foreach (var arr in week)
                         {
 
-                            @:['@(arr[1])', @(arr[0])],
+                            @:['@(arr[1].Substring(0, 1))', @(arr[0])],
                         }
 
             ]);
@@ -594,7 +599,7 @@
                 @foreach (var arr in day)
                      {
 
-                         @:['@(arr[1])', @(arr[0])],
+                         @:['@(arr[1].Substring(0, 8))',  @(arr[0])],
                      }
 
             ]);
@@ -602,9 +607,10 @@
 
 
         var options = {
-            title: 'Amount of asked questions over time',
+            title: '',
             height: 200,
             curveType: 'function',
+
             backgroundColor: '#26262b',
             colors: ['#50d4b5'],
             legend: { position: 'bottom' }

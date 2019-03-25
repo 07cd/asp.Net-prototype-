@@ -79,7 +79,7 @@ namespace dotNetTest.Models
 
             lastAnswer = Answer;
 
-            string credential_path = @"D:\dotNetTest\dotNetTest\Adriaan-18cad82b0123.json";
+            string credential_path = @"C:\Users\Tuan\source\repos\asp.Net-prototype-\dotNetTest\Adriaan-18cad82b0123.json";
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
             if (!questions.Contains(variable))
             {
