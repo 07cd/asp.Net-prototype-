@@ -91,13 +91,14 @@ namespace dotNetTest.Controllers
         }
 
         [HttpPost]
-        public ActionResult Find()
+        public ActionResult Find(string answer)
         {
             Debug.WriteLine(Request.Form["answer"]);
-            new Find(Request.Form["answer"], out string Output);   
+            string question = answer;
+            new Find(question, out string Output);   
 
             TempData.Add("answer", Output);
-            return (RedirectToAction("About", new { answer = Output }));
+            return (RedirectToAction("About", new { answer = Output, q = question }));
             
         }
         [HttpPost]

@@ -1,17 +1,78 @@
 ﻿@{
     ViewBag.Title = "About";
+
 }
+@{
+    string output = "";
+    if (TempData.Count > 0)
+    {
+        try
+        {
+
+            output = TempData["answer"].ToString();
+            <div class="row mt-4 pt-4 mb-5">
+                <div class="col-md-12">
+                    <div class="data-header text-uppercase home-border-bottom">
+                        <h4>Grongratz! see what Clippy said </h4>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-3">
+                    <div class="d-flex data-grid flex-column box-shadow">
+                        <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                            <span>
+                                You question was
+                            </span>
+                        </div>
+                        <div class="data-body p-2 pt-4 pb-4">
+                            @Request["q"]
+                        </div>
+
+                    </div>
+                    
+                </div>
+                <div class="col-md-6 mt-3">
+                    <div class="d-flex data-grid flex-column box-shadow">
+                        <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                            <span>Clippy responded</span>
+                        </div>
+                        <div class="data-body p-2 pt-4 pb-4">
+                            " @output "
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="divid mt-4 mb-5" />
+        }
+        catch
+        {
+            output = "Clippy is sorry. She couln't find your answer. Don't blame her. Blame front-end people. Thats the way it goes.";
+
+            <div class="row mt-4 pt-4 mb-5">
+
+                <div class="col-md-12">
+                    <div class="d-flex data-grid flex-column box-shadow">
+                        <div class="data-header text-uppercase ft-15 p-2 pt-4 pb-4 home-border-bottom">
+                            <span>@output</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <hr class="divid mt-4 mb-5" />
+        }
+    }
+}
+
 
 <div class="text-wrap pb-3 ">
     <h3>@ViewBag.Message</h3>
 
     <p class="mb-3 mt-3 ft-17 text-grey">
-        This panel is to add a question that can be used in the bot. use the form to do that. The right side of the page shows how many question and
-        answer are added today on @DateTime.Now.Day @DateTime.Now.ToString("MMMM").
+        This panel is to add a question that can be used in the bot. Use the form to do that. The right side of the page shows statics of the amount that questions has been ask and the amount of users that asked questions.
     </p>
 
 </div>
-<hr class="divid"/>
+<hr class="divid" />
 <div class="row mt-4 pt-4">
     <div class="col-md-9">
         <div class="d-flex  flex-column  ">
@@ -21,21 +82,21 @@
             </div>
             <div class="data-body p-2 w-100">
                 <p class="p-3  mb-5 msg-wrap ">
-                    Add a question here. After the question has been saved, users can ask the question. Important to mention that it is possible from the users point 
-                    to ask different kind of questions for one answer. 
+                    Add a question here. After the question has been saved, users can ask the question. Important to mention that it is possible from the users point
+                    to ask different kind of questions for one answer.
                 </p>
                 @using (Html.BeginForm("Insert", "Home", FormMethod.Post))
                 {
                     <div class="form-group  w-100">
                         <label class="text-uppercase text-grey">Question</label>
-                        <input type="text" class="form-control input-text home-input" name="question" value="@Request.Form["question"]" placeholder="your question">
+                        <input type="text" class="form-control input-text home-input w-100" name="question" value="@Request.Form["question"]" placeholder="your question">
                     </div>
                     <div class="form-group w-100 mt-4">
                         <label class="text-uppercase text-grey">Answer</label>
-                        <input type="text" name="answer" value="@Request.Form["answer"]" class="form-control input-text home-input" placeholder="your answer">
+                        <input type="text" name="answer" value="@Request.Form["answer"]" class="form-control input-text home-input w-100" placeholder="your answer">
                     </div>
                     <div class="form-group text-right mt-4">
-                        <input type="submit" name="buttonSubmit" class="btn home-btn" value="SAVE"/>
+                        <input type="submit" name="buttonSubmit" class="btn home-btn" value="SAVE" />
                     </div>
 
                 }
@@ -50,13 +111,14 @@
             </div>
             <div class="data-body p-2">
                 <div class="qa-box d-flex flex-column align-items justify-content">
-                    <span class="ft-16 bold">Questions</span>
+                    <span class="ft-16 bold">Questions asked</span>
                     <span class="ft-60">2</span>
                 </div>
                 <div class="qa-box d-flex flex-column align-items justify-content mt-2">
-                    <span class="ft-16 bold">Answer</span>
+                    <span class="ft-16 bold">Users questions</span>
                     <span class="ft-60">4</span>
                 </div>
+
             </div>
         </div>
     </div>
@@ -86,25 +148,11 @@
                     </div>
 
                 }
-                @{
-                    string output = "";
-                    if (TempData.Count > 0)
-                    {
-                        try
-                        {
-                            output = TempData["answer"].ToString();
-                        }
-                        catch
-                        {
-                            output = "Invalid input";
-                        }
-                    }
-                }
-                <h4>@output</h4>
+
             </div>
         </div>
     </div>
-   
+
 </div>
 
 <!--

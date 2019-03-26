@@ -143,9 +143,10 @@
     </div>
 </div>
 
+
 <!-- User and line chart begin style="height: 334.8px" -->
 <div class="row mb-4" style="margin-top: 2em;">
-    <div class="col-md-4" style="height: 285.233px">
+    <div class="col-md-4" style="height: 235px">
         <div class="d-flex data-grid flex-column box-shadow h-100">
             <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
                 <span>Users</span>
@@ -172,23 +173,17 @@
     </div>
     <div class="col-md-8">
         <div class="d-flex data-grid flex-column box-shadow" id="height2">
-            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+            <div class="data-header text-uppercase ft-15 p-0 home-border-bottom d-flex justify-content-between align-items">
                 <span>QUESTIONS OVER TIME</span>
+                <select id="timeSelect" class="form-control own-select bold" onchange="drawLineChart()" style="width: auto !important;">
+                    <option value="year">Year</option>
+                    <option value="month">Month</option>
+                    <option value="week">Week</option>
+                    <option value="day" selected>Day</option>
+                </select>
             </div>
 
             <div class="data-body p-0">
-                <div class="d-flex w-100 justify-content-around align-items p-2">
-                    <span class="">
-                        Amount of asked questions (y) over time (x)
-                    </span>
-                    <select id="timeSelect" class="form-control own-select" onchange="drawLineChart()" style="width: auto !important; padding: 0 2em !important;">
-                        <option value="year">Year</option>
-                        <option value="month">Month</option>
-                        <option value="week">Week</option>
-                        <option value="day" selected>Day</option>
-                    </select>
-                </div>
-
                 <div id="line_statics" class="chart_div"></div>
             </div>
         </div>
@@ -196,7 +191,94 @@
 </div>
 <!--           -->
 
+<div class="row mb-4" style="margin-top: 2em;">
+    <div class="col-md-6">
+        <div class="d-flex data-grid flex-column box-shadow h-100">
+            <div class="data-header text-uppercase ft-15 p-0 home-border-bottom d-flex justify-content-between align-items">
+                <span class="p-2">Users & Questions</span>
+                <ul class="nav nav-tabs own-nav-tab">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#home"><span>Questions</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#menu1" style="padding: 10px 25px;"><span>Users</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="data-body p-4 text-light h-100">
+                <div class="tab-content items" style="height: 192.2px;">
+                    <div class="tab-pane active " id="home">
 
+                        <div class="list-group">
+                            @using (Html.BeginForm("QuestionStats", "Home", FormMethod.Post))
+                            {
+                                int counter = 0;
+                                foreach (var q in questions)
+                                {
+                                    counter++;
+                                    <div class="d-flex flex-row mb-2">
+                                        <span class="tab-counter ">@counter</span>
+                                        <div class="d-flex flex-row ml-2 mr-2 w-100">
+                                            <button type="submit" name="question" value="@q" class="w-100 tab-input">@q</button>
+                                            <span class="d-flex justify-content align-items tab-icon "><i class="fas fa-question"></i></span>
+                                        </div>
+
+                                    </div>
+
+                                }
+                            }
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane container fade  col-md-12" id="menu1">
+
+                        <div class="list-group">
+                            @using (Html.BeginForm("UserStats", "Home", FormMethod.Post))
+                            {
+                                foreach (var u in users)
+                                {
+                                    int ct = 0;
+                                    <div class="d-flex flex-row mb-2">
+                                        <span class="tab-counter ">@ct</span>
+                                        <div class="d-flex flex-row ml-2 mr-2 w-100">
+                                            <button type="submit" name="question" value="@u" class="w-100 tab-input">@u</button>
+                                            <span class="d-flex justify-content align-items tab-icon "><i class="fas fa-question"></i></span>
+                                        </div>
+
+                                    </div>
+                                 
+                                }
+
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="d-flex data-grid flex-column box-shadow">
+            <div class="data-header text-uppercase ft-15 p-0 home-border-bottom d-flex justify-content-between align-items">
+                <span>Question statistics</span>
+                <select id="timeSelect" class="form-control own-select" onchange="drawLineChart()" style="width: auto !important;">
+                    <option value="year">Year</option>
+                    <option value="month">Month</option>
+                    <option value="week">Week</option>
+                    <option value="day" selected>Day</option>
+                </select>
+            </div>
+            <div class="data-body p-2">
+                <div id="line_statics_question" class="chart_div"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row mb-4" style="margin-top: 2em;">
     <div class="col-md-6">
         <div class="d-flex data-grid flex-column box-shadow">
@@ -219,9 +301,8 @@
         </div>
     </div>
 </div>
-
-
 <!-- User and line chart end -->
+<!-- User and line chart begin style="height: 334.8px" -->
 <!-- section all verbs, nouns, question and answer begin -->
 <div class="row mb-4" style="margin-top: 2em;">
     <div class="col-md-3">
@@ -286,8 +367,8 @@
     </div>
 </div>
 
-
-<div class="row md-4" style="margin-top: 2em;">
+<!--
+<div class="row mt-4" style="margin-top: 2em;">
     <div class="col-md-12">
         <div class="d-flex data-grid flex-column box-shadow">
             <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
@@ -433,7 +514,7 @@
         </div>
     </div>
 </div>
-
+-->
 <style>
     .items {
         height: 150px;
@@ -607,12 +688,12 @@
 
 
         var options = {
-            title: '',
+            title: 'Amount of asked questions (y) over time (x)',
             height: 200,
             curveType: 'function',
-
             backgroundColor: '#26262b',
             colors: ['#50d4b5'],
+            'chartArea': { left: 35},
             legend: { position: 'bottom' }
         };
 
