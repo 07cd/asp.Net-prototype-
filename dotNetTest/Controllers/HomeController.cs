@@ -50,7 +50,12 @@ namespace dotNetTest.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "General information";
+            
+            ViewData["Nouns"] = Database.Get("SELECT * FROM [noun]", 1);
+            ViewData["Verbs"] = Database.Get("SELECT * FROM [verb]", 1);
+           
+            ViewData["Answers"] = Database.Get("SELECT * FROM [answer]", 1);
+            
 
             return View();
         }
@@ -112,6 +117,7 @@ namespace dotNetTest.Controllers
         [HttpPost]
         public ActionResult UserStats(string user)
         {
+            Debug.WriteLine(user);
             string amountToday = Database.Get($"SELECT count(*) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id  WHERE date = (CONVERT (date, GETDATE())) AND name = '{user}'", 0).First().ToString();
             string amountAll = Database.Get($"SELECT count(name) FROM user_question JOIN [user] AS u ON user_question.user_id = u.id WHERE name = '{user}'",0).First().ToString();
 
@@ -163,10 +169,25 @@ namespace dotNetTest.Controllers
             TempData.Add("QuestionAmountToday", amountToday);
             TempData.Add("QuestionAmountAll", amountAll);
 
-            
-            
+
+            Debug.WriteLine(amountToday, amountAll);
             return (RedirectToAction("Index", new { questionAmountAll = amountAll, questionAmountToday = amountToday, questionDayData = dData, questionWeekData = wData,  questionMonthData = mData, questionYearData = yData,  }));
         }
+
+
+
+        [HttpPost]
+        public ActionResult LinkKeywords(List<string> nounList, List<string> verbList, string answer)
+        {
+
+
+            
+            Model.linkKeywords(nounList, verbList, answer);
+
+
+            return (RedirectToAction("About" ));
+        }
+
 
     }
 }

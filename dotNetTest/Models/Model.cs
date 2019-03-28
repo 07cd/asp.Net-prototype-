@@ -79,7 +79,7 @@ namespace dotNetTest.Models
 
             lastAnswer = Answer;
 
-            string credential_path = @"C:\Users\Tuan\source\repos\asp.Net-prototype-\dotNetTest\Adriaan-18cad82b0123.json";
+            string credential_path = @"D:\dotNetTest\dotNetTest\Adriaan-18cad82b0123.json";
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
             if (!questions.Contains(variable))
             {
@@ -157,6 +157,43 @@ namespace dotNetTest.Models
             }
            
 
+        }
+
+        public static void linkKeywords(List<string> nounList, List<string> verbList, string answer)
+        {
+            //todo: if not exists insert verb/noun
+            Connect();
+
+            
+            
+            string question = "";
+
+            nounList.ForEach(delegate(string noun) { question += noun; });
+            verbList.ForEach(delegate (string verb) { question += verb; });
+
+            sql = $"INSERT INTO question(question) VALUES('{question}')";
+            Execute(sql);
+
+
+            sql = $"INSERT INTO keysentence(question_id, answer_id) VALUES((SELECT TOP 1 id FROM question WHERE question = '{question}'), (SELECT TOP 1 id FROM answer WHERE answer = '{answer}'))";
+            Execute(sql);
+
+            nounList.ForEach(delegate(string noun)
+                {
+                    sql =
+                        $"INSERT INTO noun_keysentence(noun_id, keysentence_id) VALUES((SELECT TOP 1 id FROM noun WHERE word = '{noun}'),(SELECT TOP 1 id FROM keysentence WHERE answer_id = (SELECT TOP 1 id FROM answer WHERE answer = '{answer}') AND question_id = (SELECT TOP 1 id FROM question WHERE question = '{question}')))";
+                    Execute(sql);
+                });
+            verbList.ForEach(delegate (string verb)
+            {
+                sql =
+                    $"INSERT INTO verb_keysentence(verb_id, keysentence_id) VALUES((SELECT TOP 1 id FROM verb WHERE word = '{verb}'),(SELECT TOP 1 id FROM keysentence WHERE answer_id = (SELECT TOP 1 id FROM answer WHERE answer = '{answer}') AND question_id = (SELECT TOP 1 id FROM question WHERE question = '{question}')))";
+                Execute(sql);
+            });
+
+            
+            
+            DisConnect();
         }
 
     }

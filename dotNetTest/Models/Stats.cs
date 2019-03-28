@@ -59,7 +59,7 @@ namespace dotNetTest.Models
         {
             Connect();
             sql = query;
-           
+          
             List<string> count = new List<string>(Get(sql, 0));
             List<string> time = new List<string>(Get(sql, 1));
             timeStats = new List<string[]>();

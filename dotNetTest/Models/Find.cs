@@ -23,7 +23,7 @@ namespace dotNetTest.Models
         public Find(string input, out string output)
         {
             Debug.WriteLine(input);
-            string credential_path = @"C:\Users\Tuan\source\repos\asp.Net-prototype-\dotNetTest\Adriaan-18cad82b0123.json";
+            string credential_path = @"D:\dotNetTest\dotNetTest\Adriaan-18cad82b0123.json";
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
             allNouns.Clear();
             allVerbs.Clear();

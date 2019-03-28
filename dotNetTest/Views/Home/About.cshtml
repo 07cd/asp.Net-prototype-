@@ -3,6 +3,10 @@
 
 }
 @{
+    var answers = ViewBag.Answers;
+    List<string> nouns = ViewBag.Nouns;
+    List<string> verbs = ViewBag.Verbs;
+
     string output = "";
     if (TempData.Count > 0)
     {
@@ -28,7 +32,7 @@
                         </div>
 
                     </div>
-                    
+
                 </div>
                 <div class="col-md-6 mt-3">
                     <div class="d-flex data-grid flex-column box-shadow">
@@ -123,6 +127,70 @@
         </div>
     </div>
 </div>
+
+@using (Html.BeginForm("LinkKeywords", "Home", FormMethod.Post))
+{
+    <div class="row mt-4 pt-4">
+        <div class="col-md-3">
+            <div class="d-flex data-grid flex-column box-shadow ">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>Verbs</span>
+                </div>
+                <div class="data-body p-2">
+                    <select multiple name="verbList" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
+                        @foreach (var v in verbs)
+                        {
+                            <option value="@v">@v</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 pt-4">
+        <div class="col-md-3">
+            <div class="d-flex data-grid flex-column box-shadow ">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>Answer</span>
+                </div>
+                <div class="data-body p-2">
+                    <select multiple name="answer" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
+                        @foreach (var a in answers)
+                        {
+                            <option value="@a">@a</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn">Koppel</button>
+        </div>
+    </div>
+
+    <div class="row mt-4 pt-4">
+        <div class="col-md-3">
+            <div class="d-flex data-grid flex-column box-shadow">
+                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                    <span>Nouns</span>
+                </div>
+                <div class="data-body p-2">
+                    <select multiple name="nounList" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
+                        @foreach (var n in nouns)
+                        {
+                            <option value="@n">@n</option>
+                        }
+                    </select>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+
+}
+
+
 <hr class="divid" />
 
 <div class="row mt-4 pt-4">

@@ -48,6 +48,10 @@
             QuestionAmountToday = TempData["QuestionAmountToday"].ToString();
             QuestionAmountAll = TempData["QuestionAmountAll"].ToString();
             questionBool = true;
+            foreach (var testse in QuestionYear)
+            {
+                Debug.WriteLine(testse[0], testse[1]);
+            }
         }
         catch
         {
@@ -79,7 +83,7 @@
 
 
 
-
+    
 
 
     var users = ViewBag.Users;
@@ -159,6 +163,7 @@
                     </div>
                     <div class="d-flex flex-column ml-2">
                         <div class="d-flex align-items border-bottom ">
+
                             <span class="ft-40 p-2 pl-0">@users.Count</span>
                             <small class="text-uppercase ft-11">Registered users who joined the chat with the bot</small>
                         </div>
