@@ -77,23 +77,25 @@ namespace dotNetTest.Models
             {
                
                 StringBuilder sql = new StringBuilder();
-                sql.Append($"SELECT answer FROM keysentence AS ks JOIN verb_keysentence AS vk ON vk.keysentence_id = ks.id JOIN noun_keysentence AS nk ON nk.keysentence_id = ks.id JOIN verb AS v ON v.id = verb_id JOIN noun AS n ON n.id = noun_id JOIN answer AS a ON a.id = ks.answer_id WHERE");
+                sql.Append($"SELECT TOP 1 answer FROM keysentence AS ks JOIN verb_keysentence AS vk ON vk.keysentence_id = ks.id JOIN noun_keysentence AS nk ON nk.keysentence_id = ks.id JOIN verb AS v ON v.id = verb_id JOIN noun AS n ON n.id = noun_id JOIN answer AS a ON a.id = ks.answer_id WHERE");
                 foreach (var verb in allVerbs)
                 {
-                    if (allVerbs.IndexOf(verb) < allVerbs.Count - 1 && allVerbs.Count > 1)
+                    foreach (var noun in allNouns)
                     {
-                        sql.Append($" v.word = '{verb}' AND");
-                    }
-                    else
-                    {
-                        sql.Append($" v.word = '{verb}'");
-                    }
+                        if (allVerbs.IndexOf(verb) < allVerbs.Count - 1 && allVerbs.Count > 1)
+                        {
 
+                            sql.Append($"( v.word = '{verb}' AND n.word = '{noun}') OR");
+
+                        }
+                        else
+                        {
+                            sql.Append($"( v.word = '{verb}' AND n.word = '{noun}')");
+                        }
+                    }
                 }
-                foreach (var noun in allNouns)
-                {
-                    sql.Append($" AND n.word = '{noun}'");
-                }
+
+                sql.Append("GROUP BY answer, question_id, v.word, n.word ");
                 Debug.WriteLine(sql.ToString());
                 Output = Get(sql.ToString(), 0).First();
                 strOutput = Output;
