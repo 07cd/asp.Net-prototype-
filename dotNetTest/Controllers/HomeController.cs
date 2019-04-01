@@ -188,6 +188,25 @@ namespace dotNetTest.Controllers
             return (RedirectToAction("About" ));
         }
 
+        [HttpPost]
+        public ActionResult AddWord(string button, string verb = "", string noun = "")
+        {
+
+            
+
+            if (button == "verb")
+            {
+                Model.InserWord(verb.ToLower(), "verb");
+            }
+            else if (button == "noun")
+            {
+                Model.InserWord(noun.ToLower(), "noun");
+            }
+           
+
+
+            return (RedirectToAction("About"));
+        }
 
     }
 }

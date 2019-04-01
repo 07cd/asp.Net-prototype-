@@ -136,158 +136,194 @@
         </div>
         <div class="data-body p-2 w-100">
             <p class="mb-3 mt-3 text-grey">
-                This function make it possible to link a question to an answer. 
+                This function make it possible to link a question to an answer.
             </p>
         </div>
     </div>
 </div>
 
-@using (Html.BeginForm("LinkKeywords", "Home", FormMethod.Post))
-{
+<form asp-controller="Home" asp-action="AddWord"  method="post" id="addWord"></form>
+
+    @using (Html.BeginForm("LinkKeywords", "Home", FormMethod.Post))
+    {
+        <div class="row mt-4 pt-4">
+            <div class="col-md-3">
+                <div class="d-flex data-grid flex-column box-shadow ">
+                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                        <span>Verbs</span>
+                    </div>
+                    <div class="data-body p-2">
+                        <select multiple name="verbList" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
+                            @foreach (var v in verbs)
+                            {
+                                <option value="@v">@v</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+
+
+
+
+                <input type="text" name="verb" form="addWord" class="form-control" placeholder="Verb.." id="addVerb">
+                <button class="addWord btn home-btn" name="button" value="verb" form="addWord" type="submit">+</button>
+                
+
+
+            </div>
+            <div class="col-md-3">
+                <div class="d-flex data-grid flex-column box-shadow ">
+                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                        <span>Answer</span>
+                    </div>
+                    <div class="data-body p-2">
+                        <select multiple name="answer" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
+                            @foreach (var a in answers)
+                            {
+                                <option value="@a">@a</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="d-flex data-grid flex-column box-shadow">
+                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                        <span>Nouns</span>
+                    </div>
+                    <div class="data-body p-2">
+                        <select multiple name="nounList" id="nounList" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
+                            @foreach (var n in nouns)
+                            {
+                                <option value="@n">@n</option>
+
+                            }
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                
+                <input type="text" name="noun" form="addWord" class="form-control" placeholder="Noun.." id="addNoun">
+                <button class="addWord btn home-btn" name="button" value="noun" form="addWord" type="submit">+</button>
+
+
+
+            </div>
+
+            <div class="col-md-9">
+                <div class="form-group text-right mt-4">
+                    <button type="submit" class="btn home-btn">Koppel</button>
+                </div>
+            </div>
+
+
+        </div>
+    }
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){  
+        $(".addWord").click(function(){  
+                  
+            $("#addWord").attr("action","AddWord");   
+            $("#addWord").submit(); 
+        });  
+
+
+        });  
+    </script>
+    <hr class="divid" />
+
     <div class="row mt-4 pt-4">
-        <div class="col-md-3">
-            <div class="d-flex data-grid flex-column box-shadow ">
-                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                    <span>Verbs</span>
-                </div>
-                <div class="data-body p-2">
-                    <select multiple name="verbList" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
-                        @foreach (var v in verbs)
-                        {
-                            <option value="@v">@v</option>
-                        }
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="d-flex data-grid flex-column box-shadow ">
-                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                    <span>Answer</span>
-                </div>
-                <div class="data-body p-2">
-                    <select multiple name="answer" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
-                        @foreach (var a in answers)
-                        {
-                            <option value="@a">@a</option>
-                        }
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="d-flex data-grid flex-column box-shadow">
-                <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                    <span>Nouns</span>
-                </div>
-                <div class="data-body p-2">
-                    <select multiple name="nounList" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
-                        @foreach (var n in nouns)
-                        {
-                            <option value="@n">@n</option>
-                        }
-                    </select>
-
-                </div>
-            </div>
-        </div>
         <div class="col-md-9">
-            <div class="form-group text-right mt-4">
-                <button type="submit" class="btn home-btn">Koppel</button>
+            <div class="d-flex  flex-column  ">
+
+                <div class="data-header text-uppercase p-2 home-border-bottom">
+                    <h4>Ask Clippy</h4>
+                </div>
+                <div class="data-body p-2 w-100">
+
+                    <p class="mb-3 mt-3 pb-4 border-bottom text-grey">
+                        After you have add a question you can use this section to test if the question and answer works. In other words this is your personal test area.
+                    </p>
+                    @using (Html.BeginForm("Find", "Home", FormMethod.Post))
+                    {
+                        <div class="form-group mt-4 w-100">
+                            <label class="text-uppercase text-grey">What is the question that you want to ask Clippy 07?</label>
+                            <input type="text" class="form-control input-text home-input" name="answer" value="@Request.Form["answer"]" placeholder="your question">
+                        </div>
+                        <div class="form-group text-right mt-4">
+                            <button class="btn home-btn" type="submit">Submit</button>
+                        </div>
+
+                    }
+
+                </div>
             </div>
         </div>
-       
-     
+
     </div>
-}
 
-<hr class="divid" />
-
-<div class="row mt-4 pt-4">
-    <div class="col-md-9">
-        <div class="d-flex  flex-column  ">
-
-            <div class="data-header text-uppercase p-2 home-border-bottom">
-                <h4>Ask Clippy</h4>
-            </div>
-            <div class="data-body p-2 w-100">
-
-                <p class="mb-3 mt-3 pb-4 border-bottom text-grey">
-                    After you have add a question you can use this section to test if the question and answer works. In other words this is your personal test area.
-                </p>
-                @using (Html.BeginForm("Find", "Home", FormMethod.Post))
-                {
-                    <div class="form-group mt-4 w-100">
-                        <label class="text-uppercase text-grey">What is the question that you want to ask Clippy 07?</label>
-                        <input type="text" class="form-control input-text home-input" name="answer" value="@Request.Form["answer"]" placeholder="your question">
-                    </div>
-                    <div class="form-group text-right mt-4">
-                        <button class="btn home-btn" type="submit">Submit</button>
-                    </div>
-
-                }
-
-            </div>
+    <!--
+    <h1>Output: @output</h1>
+    @using (Html.BeginForm("Find", "Home", FormMethod.Post))
+    {
+        <div class="col-md-4">
+            <label>Ask a question</label>
         </div>
-    </div>
+        <div class="col-md-8">
+            <input class="col-md-12" type="text" name="answer" value="@Request.Form["answer"]" />
+        </div>
+        <button class="btn" type="submit">submit</button>
 
-</div>
-
-<!--
-<h1>Output: @output</h1>
-@using (Html.BeginForm("Find", "Home", FormMethod.Post))
-{
-    <div class="col-md-4">
-        <label>Ask a question</label>
-    </div>
-    <div class="col-md-8">
-        <input class="col-md-12" type="text" name="answer" value="@Request.Form["answer"]" />
-    </div>
-    <button class="btn" type="submit">submit</button>
-
-}
+    }
 
 
 
 
-@using (Html.BeginForm("Insert", "Home", FormMethod.Post))
-{
-    <fieldset>
-        <legend>New Q&A</legend>
+    @using (Html.BeginForm("Insert", "Home", FormMethod.Post))
+    {
+        <fieldset>
+            <legend>New Q&A</legend>
 
-        <p>
-            <label for="genre">Question</label>
-            <input type="text" name="question" value="@Request.Form["question"]" />
-        </p>
+            <p>
+                <label for="genre">Question</label>
+                <input type="text" name="question" value="@Request.Form["question"]" />
+            </p>
 
-        <p>
-            <label for="year">Answer</label>
-            <input type="text" name="answer" value="@Request.Form["answer"]" />
-        </p>
+            <p>
+                <label for="year">Answer</label>
+                <input type="text" name="answer" value="@Request.Form["answer"]" />
+            </p>
 
-        <p><input type="submit" name="buttonSubmit" value="Add new question and answer" /></p>
-    </fieldset>
-}
+            <p><input type="submit" name="buttonSubmit" value="Add new question and answer" /></p>
+        </fieldset>
+    }
 
 
-@* @using (Html.BeginForm("Remove", "Home", FormMethod.Post)) *@
-@* { *@
-@*     <div class="form-group col-md-4"> *@
-@*         <label for="exampleFormControlSelect2">Vraag</label> *@
-@*         <select multiple class="form-control"> *@
-@* *@
-@*             <option hidden value="@Request.Form["type"]">RemoveQuestion</option> *@
-@*             @foreach (var user in questions) *@
-@*             { *@
-@*                 <option value="@Request.Form["remove"]">@user</option> *@
-@*             } *@
-@* *@
-@* *@
-@* *@
-@* *@
-@* *@
-@*         </select> *@
-@*     </div> *@
-@*     <button class="btn btn-default" type="submit">Remove</button> *@
-@* } *@
--->
+    @* @using (Html.BeginForm("Remove", "Home", FormMethod.Post)) *@
+    @* { *@
+    @*     <div class="form-group col-md-4"> *@
+    @*         <label for="exampleFormControlSelect2">Vraag</label> *@
+    @*         <select multiple class="form-control"> *@
+    @* *@
+    @*             <option hidden value="@Request.Form["type"]">RemoveQuestion</option> *@
+    @*             @foreach (var user in questions) *@
+    @*             { *@
+    @*                 <option value="@Request.Form["remove"]">@user</option> *@
+    @*             } *@
+    @* *@
+    @* *@
+    @* *@
+    @* *@
+    @* *@
+    @*         </select> *@
+    @*     </div> *@
+    @*     <button class="btn btn-default" type="submit">Remove</button> *@
+    @* } *@
+    -->

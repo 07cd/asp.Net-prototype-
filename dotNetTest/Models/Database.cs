@@ -20,7 +20,7 @@ namespace dotNetTest.Models
         static protected SqlConnection cnn;
         static protected SqlDataAdapter adapter = new SqlDataAdapter();
 
-        static protected string connectionString = @"Data Source=DESKTOP-9T25K2E\SQLEXPRESS01;Initial Catalog=prototype; Integrated Security=SSPI;";
+        static protected string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=prototype; Integrated Security=SSPI;";
         static protected SqlCommand command;
         static protected SqlDataReader dataReader;
 
@@ -33,15 +33,11 @@ namespace dotNetTest.Models
         public static void Connect()
         {
 
-            try
-            {
+            
                 cnn = new SqlConnection(connectionString);
                 cnn.Open();
-            }
-            catch
-            {
-                DisConnect();
-            }
+            
+           
         }
 
         /// <summary>
