@@ -563,6 +563,7 @@
         var options = {
             'height': 200,
             'backgroundColor': '#26262b',
+            tooltip: { isHtml: true},
             'chartArea': { left: 5, top: 30 },
             colors: ['#e6693e', '#50d4b5']
         };
@@ -583,6 +584,7 @@
             height: 200,
             backgroundColor: '#26262b',
             legend: { position: 'none' },
+            tooltip: { isHtml: true },
             axes: {
                 x: {
                     0: { side: 'top', label: 'amount of both' } // Top x-axis.
@@ -601,7 +603,6 @@
         var data = new google.visualization.arrayToDataTable([
             ['', 'Percentage'],
             ["Questions (@questions.Count)", @questions.Count],
-            ["Questions (@questions.Count)", @questions.Count],
             ["Answers (@answers.Count)", @answers.Count],
             ["Verbs (@verbs.Count)", @verbs.Count],
             ["Nouns (@nouns.Count)", @nouns.Count],
@@ -612,6 +613,7 @@
             legend: { position: 'none' },
             backgroundColor: '#26262b',
             bars: 'horizontal', // Required for Material Bar Charts.
+            tooltip: { isHtml: true },
             axes: {
                 x: {
                     0: { side: 'top' } // Top x-axis.
@@ -697,6 +699,7 @@
             height: 200,
             curveType: 'function',
             backgroundColor: '#26262b',
+            tooltip: { isHtml: true },
             colors: ['#50d4b5'],
             'chartArea': { left: 35},
             legend: { position: 'bottom' }
@@ -731,6 +734,7 @@
             legend: { position: 'none' },
             backgroundColor: '#26262b',
             bars: 'horizontal', // Required for Material Bar Charts.
+            tooltip: { isHtml: true },
             axes: {
                 x: {
                     0: { side: 'top'} // Top x-axis.
@@ -764,6 +768,7 @@
             height: 200,
             backgroundColor: '#26262b',
             legend: { position: 'none' },
+            tooltip: { isHtml: true },
             axes: {
                 x: {
                     0: { side: 'top', label: 'amount of both' } // Top x-axis.
@@ -923,6 +928,8 @@
             height: 200,
             curveType: 'function',
             backgroundColor: '#26262b',
+        
+            tooltip: { isHtml: true },
             colors: ['#50d4b5'],
             legend: { position: 'bottom' }
         };
