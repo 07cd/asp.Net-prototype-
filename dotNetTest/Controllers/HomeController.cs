@@ -50,7 +50,8 @@ namespace dotNetTest.Controllers
 
         public ActionResult About()
         {
-            ViewData["QAToday"] = Database.Get("SELECT count(*) FROM user_question where date = (SELECT CONVERT(date, getdate()))", 0);
+            ViewData["QAToday"] = Database.Get("SELECT count(*) FROM user_question where date = (SELECT CONVERT(date, getdate()))", 0).First();
+            ViewData["QAnsweredToday"] = Database.Get("SELECT count(*) FROM user_question where date = (SELECT CONVERT(date, getdate())) AND question_id IS NOT NULL", 0).First();
             ViewData["Nouns"] = Database.Get("SELECT * FROM [noun]", 1);
             ViewData["Verbs"] = Database.Get("SELECT * FROM [verb]", 1);
            
