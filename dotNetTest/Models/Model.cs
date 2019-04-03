@@ -161,7 +161,7 @@ namespace dotNetTest.Models
 
         public static void linkKeywords(List<string> nounList, List<string> verbList, string answer)
         {
-            //todo: if not exists insert verb/noun
+            
             Connect();
 
             
@@ -196,6 +196,13 @@ namespace dotNetTest.Models
             DisConnect();
         }
 
+        public static void InserWord(string word, string type)
+        {
+            Connect();
+            sql = "INSERT INTO "+ ((type == "noun")? "noun" : "verb") + $"(word) VALUES('{word}')";
+            Execute(sql);
+            DisConnect();
+        }
     }
 
 }
