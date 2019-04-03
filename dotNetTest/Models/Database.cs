@@ -32,10 +32,10 @@ namespace dotNetTest.Models
         /// </summary>
         public static void Connect()
         {
-
-            
-                cnn = new SqlConnection(connectionString);
-                cnn.Open();
+           
+            cnn = new SqlConnection(connectionString);
+            cnn.Open();
+          
             
            
         }

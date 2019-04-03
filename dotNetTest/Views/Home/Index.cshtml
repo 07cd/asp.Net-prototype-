@@ -16,7 +16,7 @@
     var questionStatCount = ViewBag.SystemStatCount;
     var questionStat = ViewBag.SystemStat;
     var systemStatList = ViewBag.SystemStatList;
-
+    
 
     List<string[]> QuestionYear = new List<string[]>();
     List<string[]> QuestionMonth = new List<string[]>();
@@ -83,7 +83,7 @@
 
 
 
-    
+
 
 
     var users = ViewBag.Users;
@@ -213,19 +213,20 @@
             <div class="data-body p-4 text-light h-100">
                 <div class="tab-content items" style="height: 192.2px;">
                     <div class="tab-pane active " id="home">
-
+                        
                         <div class="list-group">
+                            <p>Total amount of times asked</p>
                             @using (Html.BeginForm("QuestionStats", "Home", FormMethod.Post))
                             {
                                 int counter = 0;
-                                foreach (var q in questions)
+                                foreach (var q in systemStatList)
                                 {
                                     counter++;
                                     <div class="d-flex flex-row mb-2">
                                         <span class="tab-counter ">@counter</span>
                                         <div class="d-flex flex-row ml-2 mr-2 w-100">
-                                            <button type="submit" name="question" value="@q" class="w-100 tab-input">@q</button>
-                                            <span class="d-flex justify-content align-items tab-icon "><i class="fas fa-question"></i></span>
+                                            <button type="submit" name="question" value="@q[0]" class="w-100 tab-input">@q[0]</button>
+                                            <span class="d-flex justify-content align-items tab-icon ">@q[1]</span>
                                         </div>
 
                                     </div>
@@ -241,20 +242,21 @@
                     <div class="tab-pane container fade  col-md-12" id="menu1">
 
                         <div class="list-group">
+                            <p>Total amount of questions asked</p>
                             @using (Html.BeginForm("UserStats", "Home", FormMethod.Post))
                             {
-                                foreach (var u in users)
+                                foreach (var u in userStatList)
                                 {
                                     int ct = 0;
                                     <div class="d-flex flex-row mb-2">
                                         <span class="tab-counter ">@ct</span>
                                         <div class="d-flex flex-row ml-2 mr-2 w-100">
-                                            <button type="submit" name="question" value="@u" class="w-100 tab-input">@u</button>
-                                            <span class="d-flex justify-content align-items tab-icon "><i class="fas fa-question"></i></span>
+                                            <button type="submit" name="question" value="@u[0]" class="w-100 tab-input">@u[0]</button>
+                                            <span class="d-flex justify-content align-items tab-icon ">@u[1]</span>
                                         </div>
 
                                     </div>
-                                 
+
                                 }
 
                             }
@@ -600,7 +602,6 @@
     function drawBarColors() {
         var data = new google.visualization.arrayToDataTable([
             ['', 'Percentage'],
-            ["Questions (@questions.Count)", @questions.Count],
             ["Questions (@questions.Count)", @questions.Count],
             ["Answers (@answers.Count)", @answers.Count],
             ["Verbs (@verbs.Count)", @verbs.Count],
