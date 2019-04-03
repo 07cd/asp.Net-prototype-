@@ -218,14 +218,14 @@
                             @using (Html.BeginForm("QuestionStats", "Home", FormMethod.Post))
                             {
                                 int counter = 0;
-                                foreach (var q in questions)
+                                foreach (var q in systemStatList)
                                 {
                                     counter++;
                                     <div class="d-flex flex-row mb-2">
                                         <span class="tab-counter ">@counter</span>
                                         <div class="d-flex flex-row ml-2 mr-2 w-100">
-                                            <button type="submit" name="question" value="@q" class="w-100 tab-input">@q</button>
-                                            <span class="d-flex justify-content align-items tab-icon "><i class="fas fa-question"></i></span>
+                                            <button type="submit" name="question" value="@q[0]" class="w-100 tab-input">@q[0]</button>
+                                            <span class="d-flex justify-content align-items tab-icon ">@q[1]</span>
                                         </div>
 
                                     </div>
@@ -245,14 +245,14 @@
                             {
                                 
                                 int ct = 0;
-                                foreach (var u in users)
+                                foreach (var u in userStatList)
                                 {
                                     ct++;
                                     <div class="d-flex flex-row mb-2">
                                         <span class="tab-counter ">@ct</span>
                                         <div class="d-flex flex-row ml-2 mr-2 w-100">
-                                            <button type="submit" name="question" value="@u" class="w-100 tab-input">@u</button>
-                                            <span class="d-flex justify-content align-items tab-icon ">@ct</span>
+                                            <button type="submit" name="question" value="@u[0]" class="w-100 tab-input">@u[0]</button>
+                                            <span class="d-flex justify-content align-items tab-icon ">@u[1]</span>
                                         </div>
 
                                     </div>
