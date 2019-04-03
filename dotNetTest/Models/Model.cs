@@ -48,7 +48,7 @@ namespace dotNetTest.Models
               if (!answer.Contains(variable))
               {
                 lastAnswer = variable;
-                sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "')";
+                sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable.ToLower() + "')";
                   Execute(sql);
               }
               else
@@ -56,7 +56,7 @@ namespace dotNetTest.Models
                   lastAnswer = Get("SELECT id FROM answer WHERE answer = '" + variable + "' ", 0).ToString();
               }
 
-              Debug.WriteLine(lastAnswer);
+              
 
             DisConnect();
         }
@@ -77,16 +77,16 @@ namespace dotNetTest.Models
             allNouns = nouns;
             allVerbs = verbs;
 
-            lastAnswer = Answer;
+            lastAnswer = Answer.ToLower();
 
             string credential_path = @"C:\Users\Tuan\source\repos\asp.Net-prototype-\dotNetTest\Adriaan-18cad82b0123.json";
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
             if (!questions.Contains(variable))
             {
-                lastQuestion = variable;
-                string sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable + "')";
+                lastQuestion = variable.ToLower();
+                string sql = "INSERT INTO " + table + "(" + column + ") VALUES('" + variable.ToLower() + "')";
                 Execute(sql);
-                NLP.AnalyzeIncomingData(variable, allNouns, allVerbs, allQuestions );
+                NLP.AnalyzeIncomingData(variable.ToLower(), allNouns, allVerbs, allQuestions );
 
                 var verb = NLP.lastVerbs;
                 var test = NLP.lastNouns;
@@ -97,8 +97,8 @@ namespace dotNetTest.Models
             {
                 
                 // I'll have to see about setting a new keysentence and verb and noun key
-                lastQuestion = Get("SELECT id FROM[" + table + "] WHERE " + column + " = '" + variable + "'", 0).First();
-                Connect();
+                lastQuestion = Get("SELECT id FROM[" + table + "] WHERE " + column + " = '" + variable.ToLower() + "'", 0).First();
+                
 
                 bool numericAnswer = int.TryParse(lastAnswer, out int lastAnswerId);
                 string answer = (numericAnswer) ? "'" + lastAnswer + "'" : "(SELECT TOP 1 id FROM answer WHERE answer = '" + lastAnswer + "')";
@@ -168,8 +168,8 @@ namespace dotNetTest.Models
             
             string question = "";
 
-            nounList.ForEach(delegate(string noun) { question += noun; });
-            verbList.ForEach(delegate (string verb) { question += verb; });
+            nounList.ForEach(delegate(string noun) { question += $"{noun} "; });
+            verbList.ForEach(delegate (string verb) { question += $"{verb} "; });
 
             sql = $"INSERT INTO question(question) VALUES('{question}')";
             Execute(sql);
@@ -196,10 +196,10 @@ namespace dotNetTest.Models
             DisConnect();
         }
 
-        public static void InserWord(string word, string type)
+        public static void InsertWord(string word, string type)
         {
             Connect();
-            sql = "INSERT INTO "+ ((type == "noun")? "noun" : "verb") + $"(word) VALUES('{word}')";
+            sql = "INSERT INTO "+ ((type == "noun")? "noun" : "verb") + $"(word) VALUES('{word.ToLower()}')";
             Execute(sql);
             DisConnect();
         }
