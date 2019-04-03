@@ -243,14 +243,16 @@
                         <div class="list-group">
                             @using (Html.BeginForm("UserStats", "Home", FormMethod.Post))
                             {
+                                
+                                int ct = 0;
                                 foreach (var u in users)
                                 {
-                                    int ct = 0;
+                                    ct++;
                                     <div class="d-flex flex-row mb-2">
                                         <span class="tab-counter ">@ct</span>
                                         <div class="d-flex flex-row ml-2 mr-2 w-100">
                                             <button type="submit" name="question" value="@u" class="w-100 tab-input">@u</button>
-                                            <span class="d-flex justify-content align-items tab-icon "><i class="fas fa-question"></i></span>
+                                            <span class="d-flex justify-content align-items tab-icon ">@ct</span>
                                         </div>
 
                                     </div>
@@ -527,7 +529,7 @@
     }
 </style>
 
-<script src="~/Scripts/jquery-3.3.1.js"></script>
+
 <script type="text/javascript">
 
 
