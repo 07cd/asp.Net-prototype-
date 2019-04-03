@@ -16,7 +16,7 @@
     var questionStatCount = ViewBag.SystemStatCount;
     var questionStat = ViewBag.SystemStat;
     var systemStatList = ViewBag.SystemStatList;
-    
+
 
     List<string[]> QuestionYear = new List<string[]>();
     List<string[]> QuestionMonth = new List<string[]>();
@@ -83,7 +83,7 @@
 
 
 
-
+    
 
 
     var users = ViewBag.Users;
@@ -213,20 +213,19 @@
             <div class="data-body p-4 text-light h-100">
                 <div class="tab-content items" style="height: 192.2px;">
                     <div class="tab-pane active " id="home">
-                        
+
                         <div class="list-group">
-                            <p>Total amount of times asked</p>
                             @using (Html.BeginForm("QuestionStats", "Home", FormMethod.Post))
                             {
                                 int counter = 0;
-                                foreach (var q in systemStatList)
+                                foreach (var q in questions)
                                 {
                                     counter++;
                                     <div class="d-flex flex-row mb-2">
                                         <span class="tab-counter ">@counter</span>
                                         <div class="d-flex flex-row ml-2 mr-2 w-100">
-                                            <button type="submit" name="question" value="@q[0]" class="w-100 tab-input">@q[0]</button>
-                                            <span class="d-flex justify-content align-items tab-icon ">@q[1]</span>
+                                            <button type="submit" name="question" value="@q" class="w-100 tab-input">@q</button>
+                                            <span class="d-flex justify-content align-items tab-icon "><i class="fas fa-question"></i></span>
                                         </div>
 
                                     </div>
@@ -242,21 +241,22 @@
                     <div class="tab-pane container fade  col-md-12" id="menu1">
 
                         <div class="list-group">
-                            <p>Total amount of questions asked</p>
                             @using (Html.BeginForm("UserStats", "Home", FormMethod.Post))
                             {
-                                foreach (var u in userStatList)
+                                
+                                int ct = 0;
+                                foreach (var u in users)
                                 {
-                                    int ct = 0;
+                                    ct++;
                                     <div class="d-flex flex-row mb-2">
                                         <span class="tab-counter ">@ct</span>
                                         <div class="d-flex flex-row ml-2 mr-2 w-100">
-                                            <button type="submit" name="question" value="@u[0]" class="w-100 tab-input">@u[0]</button>
-                                            <span class="d-flex justify-content align-items tab-icon ">@u[1]</span>
+                                            <button type="submit" name="question" value="@u" class="w-100 tab-input">@u</button>
+                                            <span class="d-flex justify-content align-items tab-icon ">@ct</span>
                                         </div>
 
                                     </div>
-
+                                 
                                 }
 
                             }
@@ -529,7 +529,7 @@
     }
 </style>
 
-<script src="~/Scripts/jquery-3.3.1.js"></script>
+
 <script type="text/javascript">
 
 
@@ -565,6 +565,7 @@
         var options = {
             'height': 200,
             'backgroundColor': '#26262b',
+            tooltip: { isHtml: true},
             'chartArea': { left: 5, top: 30 },
             colors: ['#e6693e', '#50d4b5']
         };
@@ -585,6 +586,7 @@
             height: 200,
             backgroundColor: '#26262b',
             legend: { position: 'none' },
+            tooltip: { isHtml: true },
             axes: {
                 x: {
                     0: { side: 'top', label: 'amount of both' } // Top x-axis.
@@ -613,6 +615,7 @@
             legend: { position: 'none' },
             backgroundColor: '#26262b',
             bars: 'horizontal', // Required for Material Bar Charts.
+            tooltip: { isHtml: true },
             axes: {
                 x: {
                     0: { side: 'top' } // Top x-axis.
@@ -698,6 +701,7 @@
             height: 200,
             curveType: 'function',
             backgroundColor: '#26262b',
+            tooltip: { isHtml: true },
             colors: ['#50d4b5'],
             'chartArea': { left: 35},
             legend: { position: 'bottom' }
@@ -732,6 +736,7 @@
             legend: { position: 'none' },
             backgroundColor: '#26262b',
             bars: 'horizontal', // Required for Material Bar Charts.
+            tooltip: { isHtml: true },
             axes: {
                 x: {
                     0: { side: 'top'} // Top x-axis.
@@ -765,6 +770,7 @@
             height: 200,
             backgroundColor: '#26262b',
             legend: { position: 'none' },
+            tooltip: { isHtml: true },
             axes: {
                 x: {
                     0: { side: 'top', label: 'amount of both' } // Top x-axis.
@@ -924,6 +930,8 @@
             height: 200,
             curveType: 'function',
             backgroundColor: '#26262b',
+        
+            tooltip: { isHtml: true },
             colors: ['#50d4b5'],
             legend: { position: 'bottom' }
         };

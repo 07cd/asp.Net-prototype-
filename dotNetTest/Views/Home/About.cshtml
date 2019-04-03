@@ -142,134 +142,149 @@
     </div>
 </div>
 
-<form asp-controller="Home" asp-action="AddWord"  method="post" id="addWord"></form>
+<form asp-controller="Home" asp-action="AddWord" method="post" id="addWord"></form>
 
-    @using (Html.BeginForm("LinkKeywords", "Home", FormMethod.Post))
-    {
-        <div class="row mt-4 pt-4">
-            <div class="col-md-3">
-                <div class="d-flex data-grid flex-column box-shadow ">
-                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                        <span>Verbs</span>
-                    </div>
-                    <div class="data-body p-2">
-                        <select multiple name="verbList" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
-                            @foreach (var v in verbs)
-                            {
-                                <option value="@v">@v</option>
-                            }
-                        </select>
-                    </div>
-
-                </div>
-
-
-
-
-                <input type="text" name="verb" form="addWord" class="form-control" placeholder="Verb.." id="addVerb">
-                <button class="addWord btn home-btn" name="button" value="verb" form="addWord" type="submit">+</button>
-                
-
-
+@using (Html.BeginForm("LinkKeywords", "Home", FormMethod.Post))
+{
+<div class="row mt-4 pt-4">
+    <div class="col-md-3">
+        <div class="d-flex data-grid flex-column box-shadow ">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Verbs</span>
             </div>
-            <div class="col-md-3">
-                <div class="d-flex data-grid flex-column box-shadow ">
-                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                        <span>Answer</span>
-                    </div>
-                    <div class="data-body p-2">
-                        <select multiple name="answer" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
-                            @foreach (var a in answers)
-                            {
-                                <option value="@a">@a</option>
-                            }
-                        </select>
-                    </div>
-                </div>
+            <div class="data-body p-2">
+                <select multiple name="verbList" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
+                    @foreach (var v in verbs)
+                    {
+                        <option value="@v">@v</option>
+                    }
+                </select>
             </div>
-
-            <div class="col-md-3">
-                <div class="d-flex data-grid flex-column box-shadow">
-                    <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
-                        <span>Nouns</span>
-                    </div>
-                    <div class="data-body p-2">
-                        <select multiple name="nounList" id="nounList" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
-                            @foreach (var n in nouns)
-                            {
-                                <option value="@n">@n</option>
-
-                            }
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                
-                <input type="text" name="noun" form="addWord" class="form-control" placeholder="Noun.." id="addNoun">
-                <button class="addWord btn home-btn" name="button" value="noun" form="addWord" type="submit">+</button>
-
-
-
-            </div>
-
-            <div class="col-md-9">
-                <div class="form-group text-right mt-4">
-                    <button type="submit" class="btn home-btn">Koppel</button>
-                </div>
-            </div>
-
 
         </div>
-    }
-    <script src="~/Scripts/jquery-3.3.1.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function(){  
-        $(".addWord").click(function(){  
-                  
-            $("#addWord").attr("action","AddWord");   
-            $("#addWord").submit(); 
-        });  
 
 
-        });  
-    </script>
-    <hr class="divid" />
-
-    <div class="row mt-4 pt-4">
-        <div class="col-md-9">
-            <div class="d-flex  flex-column  ">
-
-                <div class="data-header text-uppercase p-2 home-border-bottom">
-                    <h4>Ask Clippy</h4>
-                </div>
-                <div class="data-body p-2 w-100">
-
-                    <p class="mb-3 mt-3 pb-4 border-bottom text-grey">
-                        After you have add a question you can use this section to test if the question and answer works. In other words this is your personal test area.
-                    </p>
-                    @using (Html.BeginForm("Find", "Home", FormMethod.Post))
+    </div>
+    <div class="col-md-3">
+        <div class="d-flex data-grid flex-column box-shadow">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Nouns</span>
+            </div>
+            <div class="data-body p-2">
+                <select multiple name="nounList" id="nounList" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
+                    @foreach (var n in nouns)
                     {
-                        <div class="form-group mt-4 w-100">
-                            <label class="text-uppercase text-grey">What is the question that you want to ask Clippy 07?</label>
-                            <input type="text" class="form-control input-text home-input" name="answer" value="@Request.Form["answer"]" placeholder="your question">
-                        </div>
-                        <div class="form-group text-right mt-4">
-                            <button class="btn home-btn" type="submit">Submit</button>
-                        </div>
+                        <option value="@n">@n</option>
 
                     }
 
+                </select>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="d-flex data-grid flex-column box-shadow ">
+            <div class="data-header text-uppercase ft-15 p-2 home-border-bottom">
+                <span>Answer</span>
+            </div>
+            <div class="data-body p-2">
+                <select multiple name="answer" class="form-control bg-transparent no-border text-white static-select p-0 multi-select" size="5">
+                    @foreach (var a in answers)
+                    {
+                        <option value="@a">@a</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <div class="d-flex flex-row">
+                <div class="form-group mt-4 w-100">
+                    <input type="text" name="verb" form="addWord" class="form-control input-text home-input height1" placeholder="Verb.." id="addVerb">
+                </div>
+                <div class="form-group text-right mt-4 d-flex align-end">
+                    <button class="addWord btn home-btn height2 no-radius no-radius-left no-radius-left-bottom" name="button" value="verb" form="addWord" type="submit">ADD</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="d-flex flex-row">
+                <div class="form-group mt-4 w-100">
+                    <input type="text" name="noun" form="addWord" class="form-control input-text home-input height1" placeholder="Noun.." id="addNoun">
+
+                </div>
+                <div class="form-group text-right mt-4 d-flex align-end">
+                    <button class="addWord btn home-btn height2 no-radius no-radius-left no-radius-left-bottom" name="button" value="noun" form="addWord" type="submit">ADD</button>
                 </div>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="form-group text-right mt-4">
+                <button type="submit" class="btn home-btn">Koppel</button>
+            </div>
+        </div>
+    </div>
+}
 
+<hr class="divid" />
+
+<div class="row mt-4 pt-4">
+    <div class="col-md-9">
+        <div class="d-flex  flex-column  ">
+
+            <div class="data-header text-uppercase p-2 home-border-bottom">
+                <h4>Ask Clippy</h4>
+            </div>
+            <div class="data-body p-2 w-100">
+
+                <p class="mb-3 mt-3 pb-4 border-bottom text-grey">
+                    After you have add a question you can use this section to test if the question and answer works. In other words this is your personal test area.
+                </p>
+                @using (Html.BeginForm("Find", "Home", FormMethod.Post))
+                {
+                    <div class="form-group mt-4 w-100">
+                        <label class="text-uppercase text-grey">What is the question that you want to ask Clippy 07?</label>
+                        <input type="text" class="form-control input-text home-input" name="answer" value="@Request.Form["answer"]" placeholder="your question">
+                    </div>
+                    <div class="form-group text-right mt-4">
+                        <button class="btn home-btn" type="submit">Submit</button>
+                    </div>
+
+                }
+
+            </div>
+        </div>
     </div>
 
-    <!--
+</div>
+
+
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".addWord").click(function () {
+
+            $("#addWord").attr("action", "AddWord");
+            $("#addWord").submit();
+        });
+
+       
+        var s1 = $('.height1').outerHeight();
+        var s2 = $('.height2').outerHeight();
+        
+        $('.height1').css('height', s2 + "px");
+       
+
+        console.log(s2);
+    });
+</script>
+<!--
     <h1>Output: @output</h1>
     @using (Html.BeginForm("Find", "Home", FormMethod.Post))
     {

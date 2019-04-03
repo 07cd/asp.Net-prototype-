@@ -36,6 +36,7 @@
 .tab-icon {
     padding: .5em 1em;
     border: 1px solid #434448;
+    width: 40px;
 }
 
 .tab-input {
@@ -66,10 +67,12 @@
     margin: 0;
 }
 
-    .own-nav-tab li a.active {
-        color: #50d4b5;
-        font-weight: 600;
-    }
+.own-nav-tab li.active, .nav-tabs > li.active > a, .nav-tabs > li.active {
+    color: white !important;
+    font-weight: 600 !important;
+    background: #3a8e7a !important;
+    border: unset !important;
+}
 
 .home-btn {
     padding: .5em 2em;
@@ -86,6 +89,15 @@
 .home-input {
     color: #999 !important;
 }
+
+.no-radius-left {
+    border-top-left-radius: 0 !important;
+}
+
+.no-radius-left-bottom {
+    border-bottom-left-radius: 0 !important;
+}
+
 
 .home-input:focus {
     box-shadow: unset !important;
@@ -272,8 +284,9 @@ select.multi-select option:checked {
 }
 
 .msg-wrap {
-    background: #7584bb4d;
-    border: 1px solid #7289da;
+    background: #7584bb4d !important;
+    border: 1px solid #7289da !importantwidth: 40px;
+    ;
 }
 
 .ft-10 {
